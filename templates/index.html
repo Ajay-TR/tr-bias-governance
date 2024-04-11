@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Folder Upload</title>
+  </head>
+  <body>
+    <h1>Upload Folder</h1>
+    <form id="uploadForm" method="POST" enctype="multipart/form-data">
+      <input
+        type="file"
+        name="files"
+        id="folderInput"
+        webkitdirectory
+        directory
+        multiple
+      />
+      <button type="submit">Upload</button>
+    </form>
+
+    <div id="resultTextArea">
+      <p id="outputText" style="display: none">Enter Job Description</p>
+      <textarea
+        id="outputTextArea"
+        rows="10"
+        cols="100"
+        style="display: none"
+      ></textarea>
+      <input
+        type="text"
+        name="description"
+        id="job_descripton"
+        />
+      <button type="submit" id="doneButton" style="display: none">Done</button>
+    </div>
+  </body>
+
+  <script>
+    document
+      .getElementById("uploadForm")
+      .addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData();
+        const files = document.getElementById("folderInput").files;
+        for (let i = 0; i < files.length; i++) {
+          formData.append("files", files[i]);
+        }
+        try {
+          const response = await fetch("/upload", {
+            method: "POST",
+            body: formData,
+          });
+          console.log("Upload successful");
+          alert("Files Uploaded!");
+
+          document.getElementById("outputText").style.display = "block";
+          document.getElementById("outputTextArea").style.display = "block";
+          document.getElementById("doneButton").style.display = "block";
+        } catch (error) {
+          console.error("Error uploading files:", error);
+          alert("Something went wrong!");
+        }
+      });
+  </script>
+</html>
