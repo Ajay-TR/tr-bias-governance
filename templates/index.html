@@ -3,37 +3,35 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href= "{{ url_for('static',filename='styles/styles.css') }}">
     <title>Folder Upload</title>
   </head>
   <body>
-    <h1>Upload Folder</h1>
-    <form id="uploadForm" method="POST" enctype="multipart/form-data">
-      <input
-        type="file"
-        name="files"
-        id="folderInput"
-        webkitdirectory
-        directory
-        multiple
-      />
-      <button type="submit">Upload</button>
-    </form>
+    <h1>Talent Recruit's Bias Governance</h1>
 
-    <div id="resultTextArea">
-      <p id="outputText" style="display: none">Enter Job Description</p>
-      <form id="jd" method="POST">
-        <textarea
-        id="outputTextArea"
-        rows="10"
-        cols="100"
-        style="display: none"
-        ></textarea>
-        <button type="submit" id="doneButton" style="display: none">Done</button>
-      </form>
+    <div class="main-row">
+      <div class="main-column">
+        <div class="main-form">
+          <form id="uploadForm" method="POST" enctype="multipart/form-data">
+            <input type="file" name="files" id="folderInput" webkitdirectory directory multiple />
+            <button type="submit">Upload</button>
+          </form>
+        </div>
+        
+        <div id="resultTextArea">
+          <p id="outputText" style="display: block">Enter Job Description</p>
+          <form id="jd" method="POST">
+            <textarea id="outputTextArea" rows="10" cols="100" style="display: block"></textarea>
+            <button type="submit" id="doneButton" style="display: block">Done</button>
+          </form>
+        </div>
+      </div>
+      <div class="main-column">
+        <div id="result">
+          <div class="loader" style="display: block;"></div>
+        </div>
+      </div>
     </div>
-
-    <div id="result"></div>
-
   </body>
 
   <script>
@@ -44,6 +42,10 @@
 
         const formData = new FormData();
         const files = document.getElementById("folderInput").files;
+        if (files.length === 0) {
+          alert("ERROR: No files selected for uploading");
+          return;
+        }
         for (let i = 0; i < files.length; i++) {
           formData.append("files", files[i]);
         }
@@ -66,6 +68,8 @@
       document.getElementById("jd").addEventListener("submit", async (e) => {
         e.preventDefault();
         const jd = document.getElementById("outputTextArea").value;
+        const loader = document.getElementsByClassName("loader")[0];
+        loader.style.display = "block";
         try {
             const response = await fetch("/check_bias", {
                 method: "POST",
@@ -75,7 +79,6 @@
                 }
             });
 
-            
             if (response.ok) {
               const data = await response.json(); // Wait for the JSON response
               console.log(data.messages);
@@ -86,20 +89,27 @@
               console.log(gender_bias);
               console.log(experience_bias);
               result_div = document.getElementById("result");
+              result_text = "";
+              result_text = "<h2>Bias Detection Results</h2>";
               if (!age_bias && !gender_bias && !experience_bias) {
-                result_div.innerHTML += "No Bias Detected\n";
+                result_text += "No Bias Detected\n";
               } else {
+                result_text += "<ul>";
                 if (age_bias) {
-                  result_div.innerHTML += "Age Bias Detected for >35 years<br>";
+                  result_text += "<li>Age Bias Detected in favour of class with <span class='result-class'>35 years</span></li>";
                 }
                 if (gender_bias) {
-                  result_div.innerHTML += "Gender Bias Detected for Males<br>";
+                  result_text += "<li>Gender Bias Detected in favour of class <span class='result-class'>Males</span></li>";
                 }
                 if (experience_bias) {
-                  result_div.innerHTML += "Experience Bias Detected<br>";
+                  result_text += "<li>Experience Bias Detected in favour of class with <span class='result-class'>>5 years</span></li>";
                 }
+                result_text += "</ul>";
               }
+              loader.style.display = "none";
+              result_div.innerHTML = result_text;
             } else {
+                loader.style.display = "none";
                 console.error("HTTP error:", response.status);
             }
             
