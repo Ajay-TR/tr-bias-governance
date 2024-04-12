@@ -58,6 +58,8 @@ def score():
     df['selected'] = selected
     df.drop(columns=['similarity'], inplace=True)
 
+    bias_functions.store_results(df)
+
     print("Checking for bias")
     age_bias = bias_functions.check_bias(df, 'age', 1)
     experience_bias = bias_functions.check_bias(df, 'experience', 1)
