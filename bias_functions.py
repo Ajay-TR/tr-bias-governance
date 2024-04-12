@@ -4,6 +4,7 @@ import numpy as np
 import os
 import json
 from datetime import date 
+import base64
 
 def read_json_files(directory):
     df = pd.DataFrame(columns=['gender', 'degree', 'institute', 'year'])
@@ -58,6 +59,24 @@ def read_json_files(directory):
                 except json.JSONDecodeError as e:
                     print(f"Error reading {file_path}: {e}")
     return df
+
+def extract_text(directory):
+    url = 'https://dev.api.talentmarx.in/api/v1/ml/extract-text'
+    texts = []
+    for filename in os.listdir(directory):
+        if filename.endswith('.pdf') or filename.endswith('.docx') or filename.endswith('.doc'):
+            filepath = os.path.join(directory, filename)
+            with open(filepath, "rb") as file:
+                encoded_string_val = base64.b64encode(file.read())
+            filedata = encoded_string_val.decode('UTF-8')
+            payload = {
+                "filename": filename,
+                "filedata": filedata
+            }
+            response = requests.post(url, json=payload)
+            response_data = response.text
+            texts.append(response_data)
+    return texts
 
 def check_bias(colname, group):
     temp_df = df[[colname, 'Selected']]

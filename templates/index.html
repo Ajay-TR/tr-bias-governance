@@ -21,19 +21,16 @@
 
     <div id="resultTextArea">
       <p id="outputText" style="display: none">Enter Job Description</p>
-      <textarea
-        id="outputTextArea"
-        rows="10"
-        cols="100"
-        style="display: none"
-      ></textarea>
-      <input
-        type="text"
-        name="description"
-        id="job_descripton"
-        />
-      <button type="submit" id="doneButton" style="display: none">Done</button>
-    </div>
+        <form id="jd" method="POST">
+          <textarea
+          id="outputTextArea"
+          rows="10"
+          cols="100"
+          style="display: none"
+          ></textarea>
+          <button type="submit" id="doneButton" style="display: none">Done</button>
+        </form>
+      </div>
   </body>
 
   <script>
@@ -63,5 +60,24 @@
           alert("Something went wrong!");
         }
       });
+    
+      document.getElementById("jd").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const jd = document.getElementById("outputTextArea").value;
+        try {
+            const response = await fetch("/check_bias", {
+                method: "POST",
+                body: JSON.stringify({ jd: jd }),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            alert("Bias Checked!");
+        } catch (error) {
+            console.error("Error checking bias:", error);
+            alert("Something went wrong!");
+        }
+    });
+
   </script>
 </html>

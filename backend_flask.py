@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 import text_extraction
 import bias_functions
 import asyncio
@@ -11,6 +11,7 @@ from datetime import date
 import base64
 
 app = Flask(__name__)
+app.secret_key = 'kv-654c'
 
 @app.route('/')
 def index():
@@ -28,21 +29,34 @@ def upload():
         file.save('./uploads/' + file.filename)
             
     asyncio.run(text_extraction.start_extraction())
-    df = bias_functions.read_json_files('./uploads/parsed_json/')
-    print(df)
-    return 'Files uploaded successfully'
+    return {"message": "Files uploaded successfully"}
 
-#@app.route('/extract_files', methods=['GET'])
-#def extract_text():
-
-@app.route('./score_resums', method=['POST'])
+@app.route('/check_bias', methods=['POST'])
 def score():
-    
+    data = request.json
+    job_description = data.get('jd')
+
+    df = bias_functions.read_json_files('./uploads/parsed_json/')
+    texts = bias_functions.extract_text('./uploads/parsed_files/')
+
+    url = 'https://dev.api.talentmarx.in/api/v1/ml/similarity/'
+    data = {
+      "queryDocumentString": job_description,
+      "documentStrings": texts
+    }
+    response = requests.post(url, json=data)
+    scores = eval(response.text)['similarities']
+    df['similarity'] = scores
+    df.sort_values(by='similarity', ascending=False, inplace=True)
+
+    n = len(df) / 2
+
+    selected = [1 if i < n else 0 for i in range(len(df))]
+    df['selected'] = selected
+    df.drop(columns=['similarity'], inplace=True)
+
+    print(df)
+    return {"message": "Bias checked"}
 
 if __name__ == '__main__':
     app.run(debug=True)
-    
-# {
-# "filename": "<name of the file. extension is imp>"
-# "filedata": "<base64 encoded filedata>"
-# }
