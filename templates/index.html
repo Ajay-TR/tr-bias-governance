@@ -21,16 +21,19 @@
 
     <div id="resultTextArea">
       <p id="outputText" style="display: none">Enter Job Description</p>
-        <form id="jd" method="POST">
-          <textarea
-          id="outputTextArea"
-          rows="10"
-          cols="100"
-          style="display: none"
-          ></textarea>
-          <button type="submit" id="doneButton" style="display: none">Done</button>
-        </form>
-      </div>
+      <form id="jd" method="POST">
+        <textarea
+        id="outputTextArea"
+        rows="10"
+        cols="100"
+        style="display: none"
+        ></textarea>
+        <button type="submit" id="doneButton" style="display: none">Done</button>
+      </form>
+    </div>
+
+    <div id="result"></div>
+
   </body>
 
   <script>
@@ -50,7 +53,6 @@
             body: formData,
           });
           console.log("Upload successful");
-          alert("Files Uploaded!");
 
           document.getElementById("outputText").style.display = "block";
           document.getElementById("outputTextArea").style.display = "block";
@@ -72,7 +74,35 @@
                     "Content-Type": "application/json"
                 }
             });
-            alert("Bias Checked!");
+
+            
+            if (response.ok) {
+              const data = await response.json(); // Wait for the JSON response
+              console.log(data.messages);
+              const age_bias = data.age_bias;
+              const gender_bias = data.gender_bias;
+              const experience_bias = data.experience_bias;
+              console.log(age_bias);
+              console.log(gender_bias);
+              console.log(experience_bias);
+              result_div = document.getElementById("result");
+              if (!age_bias && !gender_bias && !experience_bias) {
+                result_div.innerHTML += "No Bias Detected\n";
+              } else {
+                if (age_bias) {
+                  result_div.innerHTML += "Age Bias Detected for >35 years<br>";
+                }
+                if (gender_bias) {
+                  result_div.innerHTML += "Gender Bias Detected for Males<br>";
+                }
+                if (experience_bias) {
+                  result_div.innerHTML += "Experience Bias Detected<br>";
+                }
+              }
+            } else {
+                console.error("HTTP error:", response.status);
+            }
+            
         } catch (error) {
             console.error("Error checking bias:", error);
             alert("Something went wrong!");

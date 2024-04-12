@@ -84,7 +84,6 @@ def check_bias(df, colname, group):
     temp_df = temp_df.dropna()
     parity_diff = metrics.statistical_parity_difference(temp_df['selected'], prot_attr=temp_df[colname], priv_group=group)
     disparate_impact = metrics.disparate_impact_ratio(temp_df['selected'], prot_attr=temp_df[colname], priv_group=group)
-    kl_divergence = metrics.kl_divergence(y_true=temp_df['selected'], prot_attr=temp_df[colname], priv_group=group)
     if ((parity_diff > 0.05 or parity_diff < -0.05) or (disparate_impact > 1.2 or parity_diff < 0.8)):
         return 1
     else:

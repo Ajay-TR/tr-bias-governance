@@ -38,6 +38,7 @@ def score():
     job_description = data.get('jd')
 
     df = bias_functions.read_json_files('./uploads/parsed_json/')
+    print("Extracting text from files")
     texts = bias_functions.extract_text('./uploads/parsed_files/')
 
     url = 'https://dev.api.talentmarx.in/api/v1/ml/similarity/'
@@ -45,6 +46,7 @@ def score():
       "queryDocumentString": job_description,
       "documentStrings": texts
     }
+    print("Calculating similarity scores")
     response = requests.post(url, json=data)
     scores = eval(response.text)['similarities']
     df['similarity'] = scores
@@ -56,10 +58,11 @@ def score():
     df['selected'] = selected
     df.drop(columns=['similarity'], inplace=True)
 
+    print("Checking for bias")
     age_bias = bias_functions.check_bias(df, 'age', 1)
     experience_bias = bias_functions.check_bias(df, 'experience', 1)
     gender_bias = bias_functions.check_bias(df, 'gender', 'Male')
-    return {"message": "Bias checked"}
+    return {"messages": "Bias checked", "age_bias": age_bias, "experience_bias": experience_bias, "gender_bias": gender_bias}
 
 if __name__ == '__main__':
     app.run(debug=True)
