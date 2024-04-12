@@ -28,7 +28,7 @@
       </div>
       <div class="main-column">
         <div id="result">
-          <div class="loader" style="display: block;"></div>
+          <div class="loader" style="display: none;"></div>
         </div>
       </div>
     </div>
@@ -96,7 +96,7 @@
               } else {
                 result_text += "<ul>";
                 if (age_bias) {
-                  result_text += "<li>Age Bias Detected in favour of class with <span class='result-class'>35 years</span></li>";
+                  result_text += "<li>Age Bias Detected in favour of class with <span class='result-class'>>35 years</span></li>";
                 }
                 if (gender_bias) {
                   result_text += "<li>Gender Bias Detected in favour of class <span class='result-class'>Males</span></li>";
