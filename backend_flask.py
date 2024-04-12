@@ -9,6 +9,7 @@ import os
 import json
 from datetime import date 
 import base64
+from aif360.sklearn import metrics
 
 app = Flask(__name__)
 app.secret_key = 'kv-654c'
@@ -55,7 +56,9 @@ def score():
     df['selected'] = selected
     df.drop(columns=['similarity'], inplace=True)
 
-    print(df)
+    age_bias = bias_functions.check_bias(df, 'age', 1)
+    experience_bias = bias_functions.check_bias(df, 'experience', 1)
+    gender_bias = bias_functions.check_bias(df, 'gender', 'Male')
     return {"message": "Bias checked"}
 
 if __name__ == '__main__':

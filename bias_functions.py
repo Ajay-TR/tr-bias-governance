@@ -5,6 +5,7 @@ import os
 import json
 from datetime import date 
 import base64
+from aif360.sklearn import metrics
 
 def read_json_files(directory):
     df = pd.DataFrame(columns=['gender', 'degree', 'institute', 'year'])
@@ -78,14 +79,13 @@ def extract_text(directory):
             texts.append(response_data)
     return texts
 
-def check_bias(colname, group):
-    temp_df = df[[colname, 'Selected']]
+def check_bias(df, colname, group):
+    temp_df = df[[colname, 'selected']]
     temp_df = temp_df.dropna()
-    parity_diff = metrics.statistical_parity_difference(temp_df['Selected'], prot_attr=temp_df[colname], priv_group=group)
-    disparate_impact = metrics.disparate_impact_ratio(temp_df['Selected'], prot_attr=temp_df[colname], priv_group=group)
-    kl_divergence = metrics.kl_divergence(y_true=temp_df['Selected'], prot_attr=temp_df[colname], priv_group=group)
-    if parity_diff > 0.05 or parity_diff < -0.05:
-        print("Statical Parity difference bias exists at {}".format(parity_diff))
-    if disparate_impact > 1.2 or parity_diff < 0.8:
-        print("Disparate impact ratio bias exists at {}".format(disparate_impact))
-    print("The distributions differ by {}".format(kl_divergence))
+    parity_diff = metrics.statistical_parity_difference(temp_df['selected'], prot_attr=temp_df[colname], priv_group=group)
+    disparate_impact = metrics.disparate_impact_ratio(temp_df['selected'], prot_attr=temp_df[colname], priv_group=group)
+    kl_divergence = metrics.kl_divergence(y_true=temp_df['selected'], prot_attr=temp_df[colname], priv_group=group)
+    if ((parity_diff > 0.05 or parity_diff < -0.05) or (disparate_impact > 1.2 or parity_diff < 0.8)):
+        return 1
+    else:
+        return 0
