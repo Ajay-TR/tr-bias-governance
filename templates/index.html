@@ -85,12 +85,21 @@
               const age_bias = data.age_bias;
               const gender_bias = data.gender_bias;
               const experience_bias = data.experience_bias;
-              console.log(age_bias);
-              console.log(gender_bias);
-              console.log(experience_bias);
+              const city_bias = data.city_bias;
+              const institute_bias = data.institute_bias;
+              fav_cities = data.fav_cities;
+              fav_institutes = data.fav_institutes;
+              
+              if (fav_cities !== undefined) {
+                fav_cities = fav_cities.join(", ");
+              }
+              if (fav_institutes !== undefined) {
+                fav_institutes = fav_institutes.join(", ");
+              }
+
               result_text = "";
               result_text = "<h2>Bias Detection Results</h2>";
-              if (!age_bias && !gender_bias && !experience_bias) {
+              if (!age_bias && !gender_bias && !experience_bias && !city_bias && !institute_bias) {
                 result_text += "No Bias Detected\n";
               } else {
                 result_text += "<ul>";
@@ -102,6 +111,12 @@
                 }
                 if (experience_bias) {
                   result_text += "<li>Experience Bias Detected in favour of class with <span class='result-class'>>5 years</span></li>";
+                }
+                if (city_bias) {
+                  result_text += "<li>City Bias Detected in favour of <span class='result-class'>"+fav_cities+"</span></li>";
+                }
+                if (institute_bias) {
+                  result_text += "<li>Institute Bias Detected in favour of <span class='result-class'>"+fav_institutes+"</span></li>";
                 }
                 result_text += "</ul>";
               }
