@@ -64,7 +64,7 @@ def score():
     gender_bias = bias_functions.check_bias_binary(df, 'gender', 'Male')
     city_bias, fav_cities = bias_functions.check_bias_multi(df, 'city')
     institute_bias, fav_institutes = bias_functions.check_bias_multi(df, 'institute')
-    return {"messages": "Bias checked", "age_bias": age_bias, "experience_bias": experience_bias, "gender_bias": gender_bias, "city_bias": city_bias, "fav_cities": fav_cities, "institute_bias": institute_bias}
+    return {"messages": "Bias checked", "age_bias": age_bias, "experience_bias": experience_bias, "gender_bias": gender_bias, "city_bias": city_bias, "fav_cities": fav_cities, "institute_bias": institute_bias, "fav_institues":fav_institutes}
 
 if __name__ == '__main__':
     app.run(debug=True)
