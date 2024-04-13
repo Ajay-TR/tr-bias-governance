@@ -2,6 +2,7 @@ import requests
 import pandas as pd
 import numpy as np
 import os
+import shutil
 import json
 from datetime import date 
 import base64
@@ -92,6 +93,7 @@ def check_bias_binary(df, colname, group):
     else:
         return 0
     
+
 def check_bias_multi(df, colname):
     temp_df = df[[colname, 'selected']]
     temp_df = temp_df.dropna()
@@ -121,3 +123,12 @@ def check_bias_multi(df, colname):
                 index_list.append(probabilities[i][0])
         favoured_list = [unique_categories[i] for i in index_list]
         return (1, favoured_list)
+def store_results(df):
+    selected = df[df['selected'] == 1]
+    not_selected = df[df['selected'] == 0]
+    dir_path = "results/"
+    if os.path.exists(dir_path):
+        shutil.rmtree(dir_path)
+    os.mkdir(dir_path)
+    selected.to_csv('results/selected_candidates.csv', index=False)
+    not_selected.to_csv('results/non_selected_candidates.csv', index=False)
