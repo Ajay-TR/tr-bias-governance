@@ -33,7 +33,10 @@ def read_json_files(directory):
                     institute = institute if institute != '' else np.nan
                     year = year if year != '' else np.nan
                     city = city if city != '' else np.nan
-
+                    employer = employer if employer != '' else np.nan
+                    experience = experience if experience != '' else np.nan
+                    exp_range = exp_range if exp_range != '' else np.nan
+                    
                     row = pd.DataFrame([{
                         'gender' : gender,
                         'degree' : degree,
@@ -80,7 +83,7 @@ def extract_text(directory):
             texts.append(response_data)
     return texts
 
-def check_bias(df, colname, group):
+def check_bias_binary(df, colname, group):
     temp_df = df[[colname, 'selected']]
     temp_df = temp_df.dropna()
     parity_diff = metrics.statistical_parity_difference(temp_df['selected'], prot_attr=temp_df[colname], priv_group=group)
@@ -90,6 +93,36 @@ def check_bias(df, colname, group):
     else:
         return 0
     
+
+def check_bias_multi(df, colname):
+    temp_df = df[[colname, 'selected']]
+    temp_df = temp_df.dropna()
+    unique_categories = temp_df[colname].unique()
+    if(len(unique_categories) == 0):
+        return (0,[])
+    probabilities = []
+    for category in unique_categories:
+        selected = df[df[colname] == category]['selected'].sum()
+        total = df[df[colname] == category].shape[0]
+        probability = selected / total
+        probabilities.append(probability)
+    
+    probabilities = list(enumerate(probabilities))
+    index = 0
+    probabilities.sort(key = lambda i:i[1], reverse = True)
+    for i in range(len(probabilities)):
+        if((probabilities[i][1] - probabilities[i+1][1]) > 0.05):
+            index = i
+            break
+    if index == (len(probabilities)-1):
+        return (0,[])
+    else:
+        index_list = []
+        for i in range(len(probabilities)):
+            if(i <= index):
+                index_list.append(probabilities[i][0])
+        favoured_list = [unique_categories[i] for i in index_list]
+        return (1, favoured_list)
 def store_results(df):
     selected = df[df['selected'] == 1]
     not_selected = df[df['selected'] == 0]
