@@ -59,10 +59,12 @@ def score():
     df.drop(columns=['similarity'], inplace=True)
 
     print("Checking for bias")
-    age_bias = bias_functions.check_bias(df, 'age', 1)
-    experience_bias = bias_functions.check_bias(df, 'experience', 1)
-    gender_bias = bias_functions.check_bias(df, 'gender', 'Male')
-    return {"messages": "Bias checked", "age_bias": age_bias, "experience_bias": experience_bias, "gender_bias": gender_bias}
+    age_bias = bias_functions.check_bias_binary(df, 'age', 1)
+    experience_bias = bias_functions.check_bias_binary(df, 'experience', 1)
+    gender_bias = bias_functions.check_bias_binary(df, 'gender', 'Male')
+    city_bias, fav_cities = bias_functions.check_bias_multi(df, 'city')
+    institute_bias, fav_institutes = bias_functions.check_bias_multi(df, 'institute')
+    return {"messages": "Bias checked", "age_bias": age_bias, "experience_bias": experience_bias, "gender_bias": gender_bias, "city_bias": city_bias, "fav_cities": fav_cities, "institute_bias": institute_bias}
 
 if __name__ == '__main__':
     app.run(debug=True)
