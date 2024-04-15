@@ -98,7 +98,7 @@ def check_bias_multi(df, colname):
     temp_df = df[[colname, 'selected']]
     temp_df = temp_df.dropna()
     unique_categories = temp_df[colname].unique()
-    if(len(unique_categories) == 0):
+    if((len(unique_categories) == 0) or (len(unique_categories) == temp_df.shape[0])):
         return (0,[])
     probabilities = []
     for category in unique_categories:
@@ -117,12 +117,10 @@ def check_bias_multi(df, colname):
     if index == (len(probabilities)-1):
         return (0,[])
     else:
-        index_list = []
-        for i in range(len(probabilities)):
-            if(i <= index):
-                index_list.append(probabilities[i][0])
-        favoured_list = [unique_categories[i] for i in index_list]
+        city_index = probabilities[0][0]
+        favoured_list = [unique_categories[city_index]]
         return (1, favoured_list)
+    
 def store_results(df):
     selected = df[df['selected'] == 1]
     not_selected = df[df['selected'] == 0]
