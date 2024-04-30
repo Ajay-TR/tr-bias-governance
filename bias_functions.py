@@ -27,6 +27,8 @@ def read_json_files(directory):
                     employer = data['ResumeParserData']["CurrentEmployer"]
                     experience = data['ResumeParserData']["WorkedPeriod"]["TotalExperienceInYear"]
                     exp_range = data['ResumeParserData']["WorkedPeriod"]["TotalExperienceRange"]
+                    keywords = data['ResumeParserData']['SkillKeywords']
+                    #religion = data['ResumeParserData']
                     
                     gender = gender if gender != '' else np.nan
                     degree = degree if degree != '' else np.nan
@@ -36,6 +38,7 @@ def read_json_files(directory):
                     employer = employer if employer != '' else np.nan
                     experience = experience if experience != '' else np.nan
                     exp_range = exp_range if exp_range != '' else np.nan
+                    keywords = keywords.split(',')
                     
                     row = pd.DataFrame([{
                         'gender' : gender,
@@ -45,7 +48,8 @@ def read_json_files(directory):
                         'city' : city,
                         'employer' : employer,
                         'experience' : experience,
-                        'experience_range' : exp_range
+                        'experience_range' : exp_range,
+                        'keywords' : keywords
                     }])
                     df = pd.concat([df, row], ignore_index=True)
                     todays_date = date.today() 
@@ -94,16 +98,21 @@ def check_bias_binary(df, colname, group):
         return 0
     
 
-def check_bias_multi(df, colname):
+def check_bias_multi(df, colname, threshold):
     temp_df = df[[colname, 'selected']]
     temp_df = temp_df.dropna()
-    unique_categories = temp_df[colname].unique()
+    unique_categories = []
+    value_counts_tuples = list(temp_df[colname].value_counts().items())
+    for i in range(len(value_counts_tuples)):
+        if(value_counts_tuples[i][1] < threshold):
+            break
+        unique_categories.append(value_counts_tuples[i][0])
     if((len(unique_categories) == 0) or (len(unique_categories) == temp_df.shape[0])):
         return (0,[])
     probabilities = []
     for category in unique_categories:
-        selected = df[df[colname] == category]['selected'].sum()
-        total = df[df[colname] == category].shape[0]
+        selected = temp_df[temp_df[colname] == category]['selected'].sum()
+        total = temp_df[temp_df[colname] == category].shape[0]
         probability = selected / total
         probabilities.append(probability)
     
