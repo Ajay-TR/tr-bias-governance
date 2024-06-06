@@ -28,7 +28,6 @@ def read_json_files(directory):
                     experience = data['ResumeParserData']["WorkedPeriod"]["TotalExperienceInYear"]
                     exp_range = data['ResumeParserData']["WorkedPeriod"]["TotalExperienceRange"]
                     keywords = data['ResumeParserData']['SkillKeywords']
-                    #religion = data['ResumeParserData']
                     
                     gender = gender if gender != '' else np.nan
                     degree = degree if degree != '' else np.nan

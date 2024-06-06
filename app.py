@@ -40,6 +40,7 @@ def score():
     df = bias_functions.read_json_files('./uploads/parsed_json/')
     print("Extracting text from files")
     texts = bias_functions.extract_text('./uploads/parsed_files/')
+    print(texts)
 
     url = 'https://dev.api.talentmarx.in/api/v1/ml/similarity/'
     data = {
@@ -49,6 +50,7 @@ def score():
     print("Calculating similarity scores")
     response = requests.post(url, json=data)
     scores = eval(response.text)['similarities']
+    print(scores)
     df['similarity'] = scores
     df.sort_values(by='similarity', ascending=False, inplace=True)
 
