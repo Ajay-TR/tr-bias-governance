@@ -1,0 +1,125 @@
+Name,Age,City,Gender,UG,PG,Degree,Employer,Experience
+A.DHANALAKSHMI, NULL, Hyderabad, NULL, J.N.T.U.A, NULL, B.Tech. (ECE), Magus IT Solutions Pvt Ltd, 2.10
+AliKhan Makhool, 36, Bareilly, Male, UPTU, NULL, B.Tech. (CSE), Avida Technologies, 4.3
+Anil, NULL, NULL, NULL, Male, Baptla Engg College, M.Tech., Minacs Marketing Services, 3.0
+Arun Kumar S, 31, Chennai, Male, SBM College of Engineering and Technology, NULL, B.E. (ECE), Mercantiler InfoTech Pvt Ltd, 1.5
+Bharathiraja R, 42, Bangalore, Male, Bharathiyar University, NULL, B.E. (IT), Infinite Computer Solution, 8
+Chaitanya Maram, NULL, NULL, NULL, Jawaharlal Nehru Technological University Hyderabad, NULL, B.Tech. (CSE), Five Below Inc, 3
+GangaBapu Dadive, NULL, NULL, NULL, NULL, Telangana University, M.Tech. (CSE), Cybage Software Pvt Ltd, 7.4
+Darvesh A, 40, Coimbatore, Male, VLB College of Arts and Science, D.J. Academy For Managerial Excellence, MCA, Negosios Software Technologies, 5.0
+Fanoos Pasha, 40.0, Bangalore, Male, H.K.B.K College of Engineering, NULL, B.E. (CSE), PHILIPS Health Care, 8.0
+Himanshu Sahoo, NULL, Bangalore, Male, NULL, NULL, B.Tech., Winjit Technologies Pvt Ltd, 3.1
+SHAIK HUSSAIN, NULL, NULL, NULL, D.V.R & HS MIC College of Technology, NULL, B.Tech. (CSE), E-Life Systems, 1.5
+Jagadeesh, NULL, Hyderabad, NULL, NULL, NULL, NULL, Infosys Ltd, 4.0
+Jagan, NULL, NULL, NULL, NULL, ICFAI University, MBA, Capgemini India Pvt. Ltd, 8.0
+Priya J, 31, Chennai, Female, Syed Ammal Engineering College, NULL, B.Tech. (IT), Span Technology Services, 7.6
+Kamarajan C, 31, Chennai, Male, Selvam College of Technology, Madras University, B.Sc. (CSE), Attune Technologies, 4.7
+Karthikeyan Subramaniam, 37, Coimbatore, Male, Bharathiar University, Bharathiar University, MCA, AES Technologies, 5+
+Karthikeyan Madhavan, 33, Coimbatore, Male, Sri Shakthi Institute of Engineering and Technology, Not applicable, B.E. (ECE), Lakeba IT Solutions, 5+
+KATHIRESAN P, 33.0, Bangalore, Male, SKP Engineering College(Anna university), NIIT, Diploma in .NET, Scientific Games, 5.0
+Kumaran .A, 41.0, Gurgaon, Male, NULL, NULL, NULL, Genx Info Technologies Pvt Ltd., 7.0
+N.Kumaresan, 35.0, Bhavani, Male, Park College of Engineering & Technology, Park College of Engineering & Technology, MCA, APPSMINE INFOTECH, 1.1
+MANI KANDA RAJA M, 34.0, Chennai, Male, University of Anna University, NULL, B.E., Alchemy Software Solutions Pvt Ltd Chennai, 9.33
+Manish Kumar Sahu, 38.0, Bangalore, Male, Jiwaji University Gwalior, Rajiv Gandhi Proudyogiki Vishwavidyalaya Bhopal, B.Sc., InEight India Pvt. Ltd. Bangalore, 13.0
+S.MOHANAKKANNAN, 36.0, NULL, Male, NULL, NULL, NULL, Ventura Automation Services Inc., 8.0
+Murali Venkata Prasad, 33.0, Secunderabad, NULL, Chaitanya Institute of Science & Technology, NULL, B.Tech., SVK systems Inc, 8.0
+Shobha Nandini, 30.0, Puttaparthi, Female, S K University, NULL, B.Tech. (CSE), CONCENTRIX Bangalore, 2.0
+NAGA SRINIVASA RAJA SEKHAR.PERI, NULL, NULL, NULL, Andhra University, NULL, B.Sc. (CSE), NexGen Analytics, 15.0
+Nagender Reddy Aredla, NULL, NULL, NULL, Jawaharlal Nehru Technological University, NULL, B.Tech. (CSE), Infosys Limited, 9.5
+Nageshwari, 27, Bangalore, Female, Guru Nanak Dev Engineering College, NULL, B.E. (CSE), Zenith Software Limited, 2.0
+P.NARASIMHA, NULL, NULL, NULL, JNTU, NULL, B.Tech., WIPRO TECHNOLOGIES Bangalore, 10.0
+Abhishek Kumar Rajput, 37.0, Ghaziabad, NULL, Kanpur University, UP Technical University, MCA, Fiserv India Pvt Ltd, 10.5
+Abhishek Naudiyal, 33.0, Gurugram, NULL, WCTM Gurugram Delhi, IMT Ghaziabad, MBA (Executive), Bank of America, 10
+Aditi Mandal, 31.0, Kolkata, Female, College of Engineering and Management, NULL, B.Tech. (ECE), Tata Consultancy Services, 8.5
+Aditya Mishra, 42.0, Noida, Male, University Institute of Technology, NULL, MCA, Mphasis Technologies Ltd, 10.4
+Nanda Vardhan, 31.0, Hyderabad, Male, J. B. Institute of Engineering and Technology, NULL, B.Tech. (CSE), Infosys, 3.5
+Ajay Kumar, 36, Noida, Male, Dr. K.N. Modi Institute of Engineering & Technology, NULL, B.Tech. (CSE), Concentrix Daksh Services India Private Limited, 11
+Ajay Mohan Sutar, 37, Navi Mumbai, Male, Mumbai University, NULL, MCA, Capgemini Technology Services India Pvt Ltd, 8
+Amith L, NULL, NULL, NULL, Sahyadri Science College, JNNCE-VTU, BCA, ConcertAI, 8.0
+Amrish Kumar, 36.0, Haridwar, Male, H.N.B. Garhwal University, Gurukul Kangri University, BCA, TATA CONSULTANCY SERVICES, 8.7
+Anant Saran, 38.0, Patna, Male, BN College, Institute of Management & Research, BCA, Accentiv India Pvt Ltd, 14.0
+Ankit Kumar, 32, Bengaluru, Male, EATM, NULL, B.Tech., Epicor, 6.5
+Aratrika Roy, 31, NULL, Female, NULL, NULL, NULL, PricewaterhouseCoopers India (PwC India), 6.92
+Aravindh S, NULL, NULL, NULL, King college of Technology, NULL, B.E., Cost Clarity (Arcadis), 7
+Arjun Choubey, NULL, NULL, Male, NULL, NULL, NULL, TSYS Noida, 13
+Ashish Shirodkar,36,NULL,Male,Mumbai University,NULL,B.E.,TCS Ltd.,12.5
+Avinash Kumar Sinha,41,Pune,Male,Meerut Institute of Engineering & Technology,NULL,B.Tech. (IT),ATOS,14
+Bikramjit Kar,NULL,Bengaluru,NULL,D.Y. Patil College of Engineering,NULL,B.E. (CSE),Sartorius Stedim India Pvt Ltd,13.83
+Chellamani C,35,Bangalore,NULL,Bharath Niketan Engineering College,NULL,B.E. (CSE),Harman Connected Services,11.83
+Deepak Kumar, 38.0, Ghaziabad, NULL, CCS University Meerut, UPTU Lucknow, MCA, RXO Inc. (US), 12.0
+Devang K Patel, 32.0, Ahmedabad, Male, GUJARAT INSTITUTE OF TECHNICAL STUDIES, NULL, B.E. (IT), Nebula Interaspace LLP, 7.0
+Dheeraj Kumar, 32.0, Hyderabad, Male, BPUT ORISSA, NULL, B.Tech., CBA, 8.0
+Dhiraj Kumar, 43.0, New Delhi, Male, C.S.J.M. University, Institute of Management Education Ghaziabad, MCA, Resbird Technologies Pvt. Ltd., 11.0
+Dip Sanyal, NULL, Kolkata, NULL, Kalyani Mahavidyalaya (KU), Bengal College of Engineering & Technology (WBUT), MCA, Infosys Ltd, 6.5
+Durgesh Nandan Sharma, 38.0, Jaipur, Male, University of Rajasthan, Rajasthan Technical University, MCA, Rightpoint India Digital Private Limited (a Genpact Company), 13.5
+Giridharan Nagaraj, 33.0, NULL, Male, Sri Ramakrishna Engineering College, Anna University, B.E. (CSE), HCL Technologies Limited, 9.7
+Harikrishna Beekam,NULL,Chennai,NULL,S.G.S College,K.M.M. College,MCA,TATA Consultancy Services Limited,14
+Harshitha Kosuru,NULL,Hyderabad,NULL,Shri Vishnu Engineering College for Women,NULL,B.Tech,IBM,7.2
+Irfan Ali Zaidi,37,Hyderabad,Male,M.P. RGPV,NULL,B.E.,Genzeon,12+
+Jai Sudhakar,Unknown,Chennai,Male,AMS Engineering College (Anna University),NULL,B.E. (ECE),Cognizant Technology Solutions,12+
+Jayakumar. S,38,Chennai,Male,Periyar E.V.R College,Periyar E.V.R College,B.Com., Likewize India Shared Services LLP,12+
+Kaarthikeyan. S,31,Coimbatore,Male,Coimbatore Institute of Technology,Bharathiyar University,B.Sc. (CT),Carl Zeiss MediTech AG,8.3
+Kalmula Venkateshwarlu,31,Hyderabad,Male,Acharya Nagarjuna University,NA,B.A.,Susoft Solutions Pvt Ltd,9.7
+Kamal Singh,34,Bangalore,Male,NA,Uttarakhand Technical University,MCA,Medefis Resource Management,11
+Kandarp Dave,38,Pune,Male,DDU Nadiad,NA,B.E. (IT),Yash Technologies Pvt. Ltd.,12
+Kiran Kumar S, 34.0, NULL, Male, Ettumanoorappan College, Saintgits College of Engineering, MCA, Nest Digital, 6.11
+Kiran Subhash Patil, 36.0, Pune, Male, Pune, NULL, B.E. Computer Engineering, Capgemini, 12.0
+Prudhvi Raju Kucharlapati, NULL, Visakhapatnam, Male, Chaitanya Engineering College (JNTU), NULL, B.Tech. (CSE), MindTree, 7.3
+Kucharlapati Prudhvi Raju, NULL, Visakhapatnam, Male, Chaitanya Engineering College (JNTU), NULL, B.Tech. (CSE), MindTree, 7.3
+Madhavan Ranganathan, NULL, Chennai, India, Adhiparasakthi Engineering College, NULL, B.E. (CSE), Accenture Solutions Pvt Ltd, 13.0
+Mangesh Mishra, NULL, NULL, NULL, Adhiparasakthi Engineering College, NULL, B.E. (CSE), LearningMate Solution Pvt Ltd, 10.0
+Manish Pandey, 36, Ghaziabad, Male, Delhi University, Indraprastha University, MCA, LTIMindtree, 9.5
+Sachin Vasant Phadatare,45,Pune,Male,Shivaji University Kolhapur,Bharti Vidyapeeth, PG Diploma (Computer Management), TCS,15+ Years
+Sagar Bhausaheb Sangale,32,NULL,Male,FCRIT Vashi,NULL,B.E. (CSE),CitiusTech HealthCare Software Systems Pvt Ltd,6.5 years
+Sandeep Kumar AK,36,Kannur,Male,University of Kannur,Mangalore University,MCA,Unique Hire,10+ years
+Santanu Pattanayak,33,Bangalore,Male,Sikkim Manipal University,BCA,IBM,8+ years
+Satya Prakash Mishra,39,Bangalore,Male,BMAS Eng. College, B.Tech. (CSE),Société Générale Global Solution Center,7+ years
+SHASHANK R. MEHTA,36,Mumbai,Male,NIIT Mumbai,NULL,M.Sc. (IT),Capgemini India Pvt Ltd,14.3 years of overall IT experience
+Shathish Ojja,38,Hyderabad,Male,JNTU,JNTU,MCA,Microsoft India Global Delivery,12
+Shirish Zaware, NULL, Pune, NULL, Pune University, Pune University, Master of Computer Management, Tata Consultancy Services, 10+ yrs
+Siddharth Prabhakar, 34, Greater Noida, Male, RISHIRAJ INSTITUTE OF TECHNOLOGY, NULL, B.E. (CSE), HCL Technologies, 9 Years
+Sreejith Kumar M,34,Bengaluru,Male,Kannur University,Indian Institute of Information Technology and Management - Kerala,M.Sc. (CSE),HCL Technologies,8+ Years
+Sripurna Chowdhury,34,NULL,Female,Visveswaraya Technological University,NULL,B.E. (CSE),NULL,12
+Suman SK,38,Ghaziabad,Female,Rajasthan University,NULL,B.E. (CSE),Source Soft Solutions Private Limited,12
+Sunil Karampudi,44,Hyderabad,Male,Srinivasa Engineering College,NULL,B.Tech.,Sonata-Software,15
+Suresh Babu Gorantla, 15, Hyderabad, Male, JNTUH, AVEVA, B.Tech., AVEVA, 15
+Sushil Dubey, 11, Mumbai, Male, Mumbai University, M.Sc. (IT), Capgemini, 10
+SWAPNA VELURU, 16, Chennai, Female, M.Tech. (CSE), Cognizant Technology Solutions, 10
+Swati Pawar, 31.0, Mumbai, Female, YMT College of Management, Mumbai University, MCA, Capgemini India Pvt Ltd, 6.75
+T. Nageswara Rao, 35.0, Hyderabad, Male, K.B.N College, IGNOU, MCA, Inteq Software LLP, 6.25
+Tushar Dilip Tingne, 36.0, Nagpur, Male, Kamla Nehru College, RTM Nagpur University, MCA, Delaplex Solutions Private Limited, 11.25
+Umesh Chand, 37.0, Phagwara, Male, HPU, Lovely Institute of Management (PTU), MCA, Open Access Technology India Private Limited (OATI), 10.0
+USHA B. SHINDE, NULL, Mumbai, Female, NULL, NULL, NULL, Mastek Ltd, NULL
+VARADARAJAN.M, NULL, Chennai, NULL, NULL, NULL, B.E (ECE), Apexon, 18.0
+Vijay Anand. T, NULL, NULL, NULL, NULL, NULL, NULL, NLB services, 12+
+Vikas Kumar Singh, 41, Greater Noida, Male, NULL, NULL, NULL, Conduent Business Services India LLP, 14+
+Vinay Kumar, 41, Greater Noida, Male, Chinmaya Degree College, G. B. Pant Engineering College, MCA, NTT Data, 12+
+Vinothkannan S, 34, Theni, Male, Anna University, NULL, B.E. (ECE), KPMG, 7
+Vishal M. Gudalkar, 34.0, Mumbai, NULL, NULL, NULL, NULL, Saint-Gobain, 11.5
+Vishal K M, 32.0, Kottayam, NULL, Mahatma Gandhi University, Bharathiar University SDE, B.Tech. (ECE), Tata Consultancy Services, 8.2
+Yogesh Chandra Joshi, 33.0, NCR Delhi, NULL, KUMAON ENGINEERING COLLEGE DWARAHAT, Kumaun University Nainital, Master of Computer Application, IBM India Pvt Ltd, 9.0
+Panduranga. D, NULL, Bangalore, Male, Andhra University, NULL, Master of Computer Application, Techmill Technologies, 8.0
+Patru Satyanarayana, NULL, NULL, Male, Andhra University, Andhra University, Master of Computer Application, Shrinet Software Pvt Ltd, 7.0
+Pradeep Kumar Yadav, 31, Sultanpur, Male, U.P.T.U. Lucknow(UP), NULL, MCA, Streamline Healthcare Solution Pvt. Ltd., 4.0
+Pranaw Vidyarthy, NULL, Bangalore, NULL, Gogte Institute of Technology, NULL, B.E. (CSE), Eka Software Solutions, 8.0
+Rabina Padhy, NULL, Bangalore, NULL, Biju Patnaik University of Odisha, NULL, B.Tech., Fidelity Information Services, 5.0
+Ramachandraiah Naini, Senior Software Engineer, NULL, NULL, Tavant Technologies, 6
+S.S.VINODH, 41, Tirupur, Male, University of Bharathiar, University of Bharathiar, MCA, Pranas Technologies Pvt Ltd, 7.0
+T.Sarath Chandra, NULL, Hyderabad, Male, GMRIT College, NULL, B.Tech. (ECE), Microsoft, 6.0
+Sathish Inbarajan, 34.0, Bengaluru, Male, V.R.S College of Engg & technology, NULL, B.E. (CSE), Stixis Technologies Private Limited, 8.9
+Satya Pradeep Kumar Mantena, 31.0, Hyderabad, Male, G.I.E.T, NULL, B.Tech. (ECE), Tata Consultancy Services, 5.5
+Prashant Khandale, 43.2, Pune, Male, Sinhgad College of Engineering, NULL, B.E., Birlasoft Limited, 14.2
+Pratik Adagale,32,NULL,NULL,Mumbai University,NULL,B.Tech.,IBM,8.6
+PR Chauhan,NULL,NULL,NULL,Punjab University,Punjab Technical University,Master of Computer Application,Banis Lab Innovation Pvt Ltd,13.5
+Raghavendra D,35,Mysore,Male,VTU,NULL,B.E. (CSE),Accenture,10.0
+Rahul Chavan,34,Pune,Male,Solapur University,Solapur University,M.Sc. (CSE),Xoriant,11.0
+Rahul Pandey,34,Lucknow,Male,UPTU,,B.Tech.,L&T Infotech,9.8
+Rahul Upadhyay,34,New Delhi,Male,IGNOU,IGNOU,MCA,Publicis Sapient,9+
+Ram Badan Nirdosh,34,Noida,Male,GBTU,N/A,B.Tech.,N/A,10+
+Ranojoy Biswas, 32.0, Kolkata, Male, Calcutta Institute of Technology, NULL, B.Tech. (CSE), PwC, 8.9
+Ravi Maheshwari, 35.0, Ghaziabad, NULL, Banaras Hindu University, GBTU, B.Com., Tata Consultancy Ltd, 10.5
+Macha Ravindra, 33.0, Hyderabad, NULL, NALLA MALLA REDDY ENGINEERING COLLEGE, NULL, B.Tech., Keyloop India Pvt Ltd, 8.0
+Ritika Khanna, 34.0, Amritsar, Female, BBK DAV College for Women, IGNOU, MCA, Accenture, 12.0
+Roshan Bhatt, 31.0, Noida, NULL, Himalayan Institute Of Technology, IMS Noida, BCA, Optum Global Solution, 7.167
+Sachin Ashok Gurav, 32.0, Mumbai, NULL, Atharva College of Engineering Malad- West, BITS Pilani, B.E., Infosys Ltd, 1.25
+Sachin Vasant Phadatare, 43.0, Pune, Male, Shivaji University Kolhapur, Bharti Vidyapeeth, B.A., TCS, 6.67

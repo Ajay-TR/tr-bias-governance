@@ -87,14 +87,24 @@
               const experience_bias = data.experience_bias;
               const city_bias = data.city_bias;
               const institute_bias = data.institute_bias;
+              const employer_bias = data.employer_bias;
+              const degree_bias = data.degree_bias;
               fav_cities = data.fav_cities;
               fav_institutes = data.fav_institutes;
+              fav_employers = data.fav_employers;
+              fav_degrees = data.fav_degrees;
               
               if (fav_cities !== undefined) {
                 fav_cities = fav_cities.join(", ");
               }
               if (fav_institutes !== undefined) {
                 fav_institutes = fav_institutes.join(", ");
+              }
+              if (fav_employers !== undefined) {
+                fav_employers = fav_employers.join(", ");
+              }
+              if (fav_degrees !== undefined) {
+                fav_degrees = fav_degrees.join(", ");
               }
 
               result_text = "";
@@ -117,6 +127,12 @@
                 }
                 if (institute_bias) {
                   result_text += "<li>Institute Bias Detected in favour of <span class='result-class'>"+fav_institutes+"</span></li>";
+                }
+                if (employer_bias) {
+                  result_text += "<li>Institute Bias Detected in favour of <span class='result-class'>"+fav_employers+"</span></li>";
+                }
+                if (employer_bias) {
+                  result_text += "<li>Institute Bias Detected in favour of <span class='result-class'>"+fav_degrees+"</span></li>";
                 }
                 result_text += "</ul>";
               }

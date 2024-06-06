@@ -40,6 +40,7 @@ def score():
     df = bias_functions.read_json_files('./uploads/parsed_json/')
     print("Extracting text from files")
     texts = bias_functions.extract_text('./uploads/parsed_files/')
+    print(texts)
 
     url = 'https://dev.api.talentmarx.in/api/v1/ml/similarity/'
     data = {
@@ -49,6 +50,7 @@ def score():
     print("Calculating similarity scores")
     response = requests.post(url, json=data)
     scores = eval(response.text)['similarities']
+    print(scores)
     df['similarity'] = scores
     df.sort_values(by='similarity', ascending=False, inplace=True)
 
@@ -64,9 +66,11 @@ def score():
     age_bias = bias_functions.check_bias_binary(df, 'age', 1)
     experience_bias = bias_functions.check_bias_binary(df, 'experience', 1)
     gender_bias = bias_functions.check_bias_binary(df, 'gender', 'Male')
-    city_bias, fav_cities = bias_functions.check_bias_multi(df, 'city')
-    institute_bias, fav_institutes = bias_functions.check_bias_multi(df, 'institute')
-    return {"messages": "Bias checked", "age_bias": age_bias, "experience_bias": experience_bias, "gender_bias": gender_bias, "city_bias": city_bias, "fav_cities": fav_cities, "institute_bias": institute_bias, "fav_institutes":fav_institutes}
+    degree_bias, fav_degrees = bias_functions.check_bias_multi(df, 'degree', 3)
+    city_bias, fav_cities = bias_functions.check_bias_multi(df, 'city', 3)
+    institute_bias, fav_institutes = bias_functions.check_bias_multi(df, 'institute', 3)
+    employer_bias, fav_employers = bias_functions.check_bias_multi(df, 'employer', 3)
+    return {"messages": "Bias checked", "age_bias": age_bias, "experience_bias": experience_bias, "gender_bias": gender_bias, "degree_bias":degree_bias, "fav_degrees":fav_degrees, "city_bias": city_bias, "fav_cities": fav_cities, "institute_bias": institute_bias, "fav_institutes":fav_institutes, "employer_bias":employer_bias, "fav_employers":fav_employers}
 
 if __name__ == '__main__':
     app.run(debug=True)
