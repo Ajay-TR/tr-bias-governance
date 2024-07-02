@@ -165,3 +165,6 @@ promt_engineering.ipynb
 *.csv
 *.png 
 *.pdf
+
+uploads/*/*
+resumes/*

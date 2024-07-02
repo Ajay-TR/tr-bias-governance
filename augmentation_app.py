@@ -7,6 +7,11 @@ import requests
 import pandas as pd
 import numpy as np
 
+from reportlab.lib.pagesizes import letter
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, PageBreak
+
 app = Flask(__name__)
 app.secret_key = 'kv-654c'
 
@@ -49,10 +54,14 @@ def augment():
     augment_functions.find_score(df, 'institute', job_description, similarity_api_url)
     augment_functions.find_score(df, 'employer', job_description, similarity_api_url)
     augment_functions.find_score(df, 'degree', job_description, similarity_api_url)
+
+    doc = SimpleDocTemplate("report.pdf", pagesize=letter)
+    elements = []
     
-    
-    #Sample call to get the favoured/unfavoured values and graph
-    #For any call, the function will either return min_elements and max_elements or all_idx, the value not returned will be None
-    #If there is no bias based on p_value, graph_path will be returned as None
-    min_elements, max_elements, all_idx, p_value, graph_path = augment_functions.get_bias_score(df, 'gender')
-    
+    elements.extend(augment_functions.get_bias_score(df, 'gender'))
+    elements.extend(augment_functions.get_bias_score(df, 'institute'))
+    elements.extend(augment_functions.get_bias_score(df, 'city'))
+    elements.extend(augment_functions.get_bias_score(df, 'employer'))
+    elements.extend(augment_functions.get_bias_score(df, 'degree'))
+
+    doc.build(elements)

@@ -5,6 +5,11 @@ import re
 from scipy.stats import f_oneway
 import matplotlib.pyplot as plt
 
+from reportlab.lib.pagesizes import letter
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, PageBreak
+
 def process_column(column):
     def process_value(value):
         if isinstance(value, str):
@@ -95,6 +100,17 @@ def get_bias_score(df, col):
     min_elements = None
     max_elements = None
     col_list = []
+
+    styles = getSampleStyleSheet()
+    title_style = styles['Title']
+    heading_style = styles['Heading1']
+    body_style = styles['BodyText']
+    elements = []
+
+    title =  Paragraph("Bias Analysis for {}".format(col), title_style)
+    elements.append(title)
+    elements.append(Spacer(1, 12))
+
     for val in df[col].unique().tolist():
         if 'nan' not in str(val):
             col_list.append('Score_'+col+'_'+str(val))
@@ -112,17 +128,63 @@ def get_bias_score(df, col):
             max_idx.append(en_means[i][0])
         min_elements = [(col_list[i], means[i]) for i in min_idx]
         max_elements = [(col_list[i], means[i]) for i in max_idx]
+
+        sec1 = Paragraph("Top 3 Categories with Minimum Mean Similarity Score: ", heading_style)
+        elements.append(sec1)
+        elements.append(Spacer(1, 12))
+        for elem in min_elements:
+            elements.append(Paragraph(f"{elem[0]} , {elem[1]}", body_style))
+            elements.append(Spacer(1, 12))
+        elements.append(Spacer(1, 12))
+
+        sec2 = Paragraph("Top 3 Categories with Maximum Mean Similarity Score: ", heading_style)
+        elements.append(sec2)
+        elements.append(Spacer(1, 12))
+        for elem in max_elements:
+            elements.append(Paragraph(f"{elem[0]} , {elem[1]}", body_style))
+            elements.append(Spacer(1, 12))
+        elements.append(Spacer(1, 12))
+
     else:
-        all_idx = [(col_list[i], means[i]) for i in range(len(means))]
+        sec1 = Paragraph("All Categories with Mean Similarity Score: ", heading_style)
+        elements.append(sec1)
+        elements.append(Spacer(1, 12))
+        for elem in [(col_list[i], means[i]) for i in range(len(means))]:
+            elements.append(Paragraph(f"{elem[0]} , {elem[1]}", body_style))
+            elements.append(Spacer(1, 12))
+        elements.append(Spacer(1, 12))
+
     data = [df[colname] for colname in col_list]
     p_value = f_oneway(*data)[1]
+
+    p_val = Paragraph(f"P-Value: {p_value}", body_style)
+    elements.append(p_val)
+    elements.append(Spacer(1, 12))
+
     if p_value < 0.05:
-        print("Bias Exists")
         plt.figure(figsize=(10, 12))
         plt.plot(col_list, means,)
         plt.xticks(rotation=90, fontsize = 6)
         graph_path = col + "_score"
         plt.savefig(graph_path, format='png')
+        plt.close()
+        
+        elements.append(Paragraph("Graphical Representation of all Scores", heading_style))
+        elements.append(Spacer(1, 12))
+        elements.append(Image(graph_path, width=500, height=500))
+        elements.append(Spacer(1, 12))
+
+        heading_style.textColor = colors.red
+        elements.append(Paragraph("Bias Detected", heading_style))
+        heading_style.textColor = colors.black
+        elements.append(Spacer(1, 12))
     else:
-        print("No Bias")
-    return min_elements, max_elements, all_idx, p_value, graph_path
+        heading_style.textColor = colors.green
+        elements.append(Paragraph("No Bias Detected", heading_style))
+        heading_style.textColor = colors.black
+        elements.append(Spacer(1, 12))
+    
+    elements.append(Spacer(1, 12))
+    elements.append(PageBreak())
+
+    return elements
