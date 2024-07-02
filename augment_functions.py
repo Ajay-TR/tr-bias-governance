@@ -187,4 +187,6 @@ def get_bias_score(df, col):
     elements.append(Spacer(1, 12))
     elements.append(PageBreak())
 
-    return elements
+    is_biased = p_value < 0.05
+
+    return elements, is_biased, max_elements

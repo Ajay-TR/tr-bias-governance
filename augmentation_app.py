@@ -58,10 +58,18 @@ def augment():
     doc = SimpleDocTemplate("report.pdf", pagesize=letter)
     elements = []
     
-    elements.extend(augment_functions.get_bias_score(df, 'gender'))
-    elements.extend(augment_functions.get_bias_score(df, 'institute'))
-    elements.extend(augment_functions.get_bias_score(df, 'city'))
-    elements.extend(augment_functions.get_bias_score(df, 'employer'))
-    elements.extend(augment_functions.get_bias_score(df, 'degree'))
+    gender_elems, gender_biased, gender_max_elements = augment_functions.get_bias_score(df, 'gender')
+    institute_elems, institute_biased, institute_max_elements = augment_functions.get_bias_score(df, 'institute')
+    city_elems, city_biased, city_max_elements = augment_functions.get_bias_score(df, 'city')
+    employer_elems, employer_biased, employer_max_elements = augment_functions.get_bias_score(df, 'employer')
+    degree_elems, degree_biased, degree_max_elements = augment_functions.get_bias_score(df, 'degree')
+
+    elements.extend(gender_elems)
+    elements.extend(institute_elems)
+    elements.extend(city_elems)
+    elements.extend(employer_elems)
+    elements.extend(degree_elems)
 
     doc.build(elements)
+
+    return {"messages": "Bias checked", "gender_bias": gender_biased, "institute_bias": institute_biased, "city_bias": city_biased, "degree_bias": degree_biased, "fav_degrees": degree_max_elements, "fav_cities": city_max_elements, "fav_institutes": institute_max_elements, "fav_employers": employer_max_elements}
