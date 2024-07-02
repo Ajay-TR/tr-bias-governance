@@ -2,17 +2,20 @@ from flask import Flask, render_template, request, session
 import text_extraction
 import bias_functions
 import asyncio
+import augment_functions
 import requests
 import pandas as pd
 import numpy as np
-import os
-import json
-from datetime import date 
-import base64
-from aif360.sklearn import metrics
+
+from reportlab.lib.pagesizes import letter
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, PageBreak
 
 app = Flask(__name__)
 app.secret_key = 'kv-654c'
+
+similarity_api_url = 'https://dev.api.talentmarx.in/api/v1/ml/similarity/'
 
 @app.route('/')
 def index():
@@ -33,44 +36,43 @@ def upload():
     return {"message": "Files uploaded successfully"}
 
 @app.route('/check_bias', methods=['POST'])
-def score():
+def augment():
     data = request.json
     job_description = data.get('jd')
 
-    df = bias_functions.read_json_files('./uploads/parsed_json/')
-    print("Extracting text from files")
-    texts = bias_functions.extract_text('./uploads/parsed_files/')
-    print(texts)
+    df               = bias_functions.read_json_files('./uploads/parsed_json/')
+    df['experience'] = augment_functions.process_column(df['experience'])
+    df['age']        = augment_functions.clean_and_convert_column(df['age'])
+    df['gender']     = augment_functions.clean_column(df['gender'])
+    df['employer']   = augment_functions.clean_column(df['employer'])
+    df['degree']     = augment_functions.clean_column(df['degree'])
+    df['institute']  = augment_functions.clean_column(df['institute'])
+    
+    print("Adding score columns")
+    augment_functions.find_score(df, 'gender', job_description, similarity_api_url)
+    augment_functions.find_score(df, 'city', job_description, similarity_api_url)
+    augment_functions.find_score(df, 'institute', job_description, similarity_api_url)
+    augment_functions.find_score(df, 'employer', job_description, similarity_api_url)
+    augment_functions.find_score(df, 'degree', job_description, similarity_api_url)
+    augment_functions.find_score(df, 'age', job_description, similarity_api_url)
 
-    url = 'https://dev.api.talentmarx.in/api/v1/ml/similarity/'
-    data = {
-      "queryDocumentString": job_description,
-      "documentStrings": texts
-    }
-    print("Calculating similarity scores")
-    response = requests.post(url, json=data)
-    scores = eval(response.text)['similarities']
-    print(scores)
-    df['similarity'] = scores
-    df.sort_values(by='similarity', ascending=False, inplace=True)
+    doc = SimpleDocTemplate("report.pdf", pagesize=letter)
+    elements = []
+    
+    gender_elems, gender_biased, gender_max_elements = augment_functions.get_bias_score(df, 'gender')
+    institute_elems, institute_biased, institute_max_elements = augment_functions.get_bias_score(df, 'institute')
+    city_elems, city_biased, city_max_elements = augment_functions.get_bias_score(df, 'city')
+    employer_elems, employer_biased, employer_max_elements = augment_functions.get_bias_score(df, 'employer')
+    degree_elems, degree_biased, degree_max_elements = augment_functions.get_bias_score(df, 'degree')
+    age_elems, age_biased, age_max_elements = augment_functions.get_bias_score(df, 'age')
 
-    n = len(df) / 2
+    elements.extend(gender_elems)
+    elements.extend(institute_elems)
+    elements.extend(city_elems)
+    elements.extend(employer_elems)
+    elements.extend(degree_elems)
+    elements.extend(age_elems)
 
-    selected = [1 if i < n else 0 for i in range(len(df))]
-    df['selected'] = selected
-    df.drop(columns=['similarity'], inplace=True)
+    doc.build(elements)
 
-    bias_functions.store_results(df)
-
-    print("Checking for bias")
-    age_bias = bias_functions.check_bias_binary(df, 'age', 1)
-    experience_bias = bias_functions.check_bias_binary(df, 'experience', 1)
-    gender_bias = bias_functions.check_bias_binary(df, 'gender', 'Male')
-    degree_bias, fav_degrees = bias_functions.check_bias_multi(df, 'degree', 3)
-    city_bias, fav_cities = bias_functions.check_bias_multi(df, 'city', 3)
-    institute_bias, fav_institutes = bias_functions.check_bias_multi(df, 'institute', 3)
-    employer_bias, fav_employers = bias_functions.check_bias_multi(df, 'employer', 3)
-    return {"messages": "Bias checked", "age_bias": age_bias, "experience_bias": experience_bias, "gender_bias": gender_bias, "degree_bias":degree_bias, "fav_degrees":fav_degrees, "city_bias": city_bias, "fav_cities": fav_cities, "institute_bias": institute_bias, "fav_institutes":fav_institutes, "employer_bias":employer_bias, "fav_employers":fav_employers}
-
-if __name__ == '__main__':
-    app.run(debug=True)
+    return {"messages": "Bias checked", "age_bias":age_biased, "fav_age": age_max_elements, "gender_bias": gender_biased, "fav_gender": gender_max_elements, "institute_bias": institute_biased, "city_bias": city_biased, "degree_bias": degree_biased, "employer_bias": employer_biased, "fav_degrees": degree_max_elements, "fav_cities": city_max_elements, "fav_institutes": institute_max_elements, "fav_employers": employer_max_elements}

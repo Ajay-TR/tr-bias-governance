@@ -84,11 +84,12 @@
               console.log(data.messages);
               const age_bias = data.age_bias;
               const gender_bias = data.gender_bias;
-              const experience_bias = data.experience_bias;
               const city_bias = data.city_bias;
               const institute_bias = data.institute_bias;
               const employer_bias = data.employer_bias;
               const degree_bias = data.degree_bias;
+              fav_age = data.fav_age;
+              fav_gender = data.fav_gender
               fav_cities = data.fav_cities;
               fav_institutes = data.fav_institutes;
               fav_employers = data.fav_employers;
@@ -106,6 +107,12 @@
               if (fav_degrees !== undefined) {
                 fav_degrees = fav_degrees.join(", ");
               }
+              if (fav_age !== undefined) {
+                fav_age = fav_agea.join(", ");
+              }
+              if (fav_gender !== undefined) {
+                fav_gender = fav_gender.join(", ");
+              }
 
               result_text = "";
               result_text = "<h2>Bias Detection Results</h2>";
@@ -114,13 +121,10 @@
               } else {
                 result_text += "<ul>";
                 if (age_bias) {
-                  result_text += "<li>Age Bias Detected in favour of class with <span class='result-class'>>35 years</span></li>";
+                  result_text += "<li>City Bias Detected in favour of <span class='result-class'>"+fav_age+"</span></li>";
                 }
                 if (gender_bias) {
-                  result_text += "<li>Gender Bias Detected in favour of class <span class='result-class'>Males</span></li>";
-                }
-                if (experience_bias) {
-                  result_text += "<li>Experience Bias Detected in favour of class with <span class='result-class'>>5 years</span></li>";
+                  result_text += "<li>City Bias Detected in favour of <span class='result-class'>"+fav_gender+"</span></li>";
                 }
                 if (city_bias) {
                   result_text += "<li>City Bias Detected in favour of <span class='result-class'>"+fav_cities+"</span></li>";
