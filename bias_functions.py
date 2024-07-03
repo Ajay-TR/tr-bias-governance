@@ -6,7 +6,6 @@ import shutil
 import json
 from datetime import date 
 import base64
-from aif360.sklearn import metrics
 
 def read_json_files(directory):
     df = pd.DataFrame(columns=['gender', 'degree', 'institute', 'year'])
@@ -84,18 +83,7 @@ def extract_text(directory):
             response = requests.post(url, json=payload)
             response_data = response.text
             texts.append(response_data)
-    return texts
-
-def check_bias_binary(df, colname, group):
-    temp_df = df[[colname, 'selected']]
-    temp_df = temp_df.dropna()
-    parity_diff = metrics.statistical_parity_difference(temp_df['selected'], prot_attr=temp_df[colname], priv_group=group)
-    disparate_impact = metrics.disparate_impact_ratio(temp_df['selected'], prot_attr=temp_df[colname], priv_group=group)
-    if ((parity_diff > 0.05 or parity_diff < -0.05) or (disparate_impact > 1.2 or parity_diff < 0.8)):
-        return 1
-    else:
-        return 0
-    
+    return texts 
 
 def check_bias_multi(df, colname, threshold):
     temp_df = df[[colname, 'selected']]

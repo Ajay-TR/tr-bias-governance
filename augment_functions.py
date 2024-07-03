@@ -96,7 +96,6 @@ def find_score(df, colname, jd, url):
 
 def get_bias_score(df, col):
     graph_path = None
-    all_idx = None
     min_elements = None
     max_elements = None
     col_list = []
@@ -187,6 +186,9 @@ def get_bias_score(df, col):
     elements.append(Spacer(1, 12))
     elements.append(PageBreak())
 
-    is_biased = p_value < 0.05
+    if p_value < 0.05:
+        is_biased = 1
+    else:
+        is_biased = 0
 
     return elements, is_biased, max_elements

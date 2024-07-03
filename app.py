@@ -60,11 +60,35 @@ def augment():
     elements = []
     
     gender_elems, gender_biased, gender_max_elements = augment_functions.get_bias_score(df, 'gender')
+    if gender_max_elements != None:
+        gender_max_elements = [t[0] for t in gender_max_elements]
+    else:
+        gender_max_elements = 0
     institute_elems, institute_biased, institute_max_elements = augment_functions.get_bias_score(df, 'institute')
+    if institute_max_elements != None:
+        institute_max_elements = [t[0] for t in institute_max_elements]
+    else:
+        institute_max_elements = 0
     city_elems, city_biased, city_max_elements = augment_functions.get_bias_score(df, 'city')
+    if city_max_elements != None:
+        city_max_elements = [t[0] for t in city_max_elements]
+    else:
+        city_max_elements = 0
     employer_elems, employer_biased, employer_max_elements = augment_functions.get_bias_score(df, 'employer')
+    if employer_max_elements != None:
+        employer_max_elements = [t[0] for t in employer_max_elements]
+    else:
+        employer_max_elements = 0
     degree_elems, degree_biased, degree_max_elements = augment_functions.get_bias_score(df, 'degree')
+    if degree_max_elements != None:
+        degree_max_elements = [t[0] for t in degree_max_elements]
+    else:
+        degree_max_elements = 0
     age_elems, age_biased, age_max_elements = augment_functions.get_bias_score(df, 'age')
+    if age_max_elements != None:
+        age_max_elements = [t[0] for t in age_max_elements]
+    else:
+        age_max_elements = 0
 
     elements.extend(gender_elems)
     elements.extend(institute_elems)
@@ -76,3 +100,6 @@ def augment():
     doc.build(elements)
 
     return {"messages": "Bias checked", "age_bias":age_biased, "fav_age": age_max_elements, "gender_bias": gender_biased, "fav_gender": gender_max_elements, "institute_bias": institute_biased, "city_bias": city_biased, "degree_bias": degree_biased, "employer_bias": employer_biased, "fav_degrees": degree_max_elements, "fav_cities": city_max_elements, "fav_institutes": institute_max_elements, "fav_employers": employer_max_elements}
+
+if __name__ == '__main__':
+    app.run(debug=True)

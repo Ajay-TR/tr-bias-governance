@@ -95,47 +95,47 @@
               fav_employers = data.fav_employers;
               fav_degrees = data.fav_degrees;
               
-              if (fav_cities !== undefined) {
+              if (fav_cities !== 0) {
                 fav_cities = fav_cities.join(", ");
               }
-              if (fav_institutes !== undefined) {
+              if (fav_institutes !== 0) {
                 fav_institutes = fav_institutes.join(", ");
               }
-              if (fav_employers !== undefined) {
+              if (fav_employers !== 0) {
                 fav_employers = fav_employers.join(", ");
               }
-              if (fav_degrees !== undefined) {
+              if (fav_degrees !== 0) {
                 fav_degrees = fav_degrees.join(", ");
               }
-              if (fav_age !== undefined) {
+              if (fav_age !== 0) {
                 fav_age = fav_agea.join(", ");
               }
-              if (fav_gender !== undefined) {
+              if (fav_gender !== 0) {
                 fav_gender = fav_gender.join(", ");
               }
 
               result_text = "";
               result_text = "<h2>Bias Detection Results</h2>";
-              if (!age_bias && !gender_bias && !experience_bias && !city_bias && !institute_bias) {
+              if (!age_bias && !gender_bias && !city_bias && !institute_bias) {
                 result_text += "No Bias Detected\n";
               } else {
                 result_text += "<ul>";
-                if (age_bias) {
+                if (age_bias && fav_age !== 0) {
                   result_text += "<li>City Bias Detected in favour of <span class='result-class'>"+fav_age+"</span></li>";
                 }
-                if (gender_bias) {
+                if (gender_bias && fav_gender !== 0) {
                   result_text += "<li>City Bias Detected in favour of <span class='result-class'>"+fav_gender+"</span></li>";
                 }
-                if (city_bias) {
+                if (city_bias && fav_cities !== 0) {
                   result_text += "<li>City Bias Detected in favour of <span class='result-class'>"+fav_cities+"</span></li>";
                 }
-                if (institute_bias) {
+                if (institute_bias && fav_institutes !== 0) {
                   result_text += "<li>Institute Bias Detected in favour of <span class='result-class'>"+fav_institutes+"</span></li>";
                 }
-                if (employer_bias) {
+                if (employer_bias && fav_employers !== 0) {
                   result_text += "<li>Institute Bias Detected in favour of <span class='result-class'>"+fav_employers+"</span></li>";
                 }
-                if (employer_bias) {
+                if (degree_bias && fav_degrees !== 0) {
                   result_text += "<li>Institute Bias Detected in favour of <span class='result-class'>"+fav_degrees+"</span></li>";
                 }
                 result_text += "</ul>";
