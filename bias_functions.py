@@ -56,9 +56,9 @@ def read_json_files(directory):
                         born = df.at[index, 'year']
                         years = df.at[index, 'experience']
                         try:
-                            df.at[index, 'age'] =  1 if((current_year - int(born)) > 35) else 0
+                            df.at[index, 'age'] =  current_year - int(born)
                         except (ValueError, TypeError):
-                            df.at[index, 'age'] = born
+                            df.at[index, 'age'] = np.nan
                         try:
                             df.at[index, 'experience'] = 1 if(float(years) > 4) else 0
                         except (ValueError, TypeError):

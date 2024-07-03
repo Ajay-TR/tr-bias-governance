@@ -55,15 +55,21 @@ def augment():
     augment_functions.find_score(df, 'employer', job_description, similarity_api_url)
     augment_functions.find_score(df, 'degree', job_description, similarity_api_url)
     augment_functions.find_score(df, 'age', job_description, similarity_api_url)
-
+    
     doc = SimpleDocTemplate("report.pdf", pagesize=letter)
     elements = []
     
-    gender_elems, gender_biased, gender_max_elements = augment_functions.get_bias_score(df, 'gender')
-    if gender_max_elements != None:
-        gender_max_elements = [t[0] for t in gender_max_elements]
+    if len(df['gender'].unique().tolist()) > 2:
+        gender_elems, gender_biased, gender_max_elements = augment_functions.get_bias_score(df, 'gender')
+        include_gender = True
+        if gender_max_elements != None:
+            gender_max_elements = [t[0] for t in gender_max_elements]
+        else:
+            gender_max_elements = 0
     else:
+        gender_biased = 0
         gender_max_elements = 0
+        include_gender = False
     institute_elems, institute_biased, institute_max_elements = augment_functions.get_bias_score(df, 'institute')
     if institute_max_elements != None:
         institute_max_elements = [t[0] for t in institute_max_elements]
@@ -84,18 +90,26 @@ def augment():
         degree_max_elements = [t[0] for t in degree_max_elements]
     else:
         degree_max_elements = 0
-    age_elems, age_biased, age_max_elements = augment_functions.get_bias_score(df, 'age')
-    if age_max_elements != None:
-        age_max_elements = [t[0] for t in age_max_elements]
+    if len(df['age'].unique().tolist()) > 2:
+        age_elems, age_biased, age_max_elements = augment_functions.get_bias_score(df, 'age')
+        include_age = True
+        if age_max_elements != None:
+            age_max_elements = [t[0] for t in age_max_elements]
+        else:
+            age_max_elements = 0
     else:
+        include_age = False
+        age_biased = 0
         age_max_elements = 0
 
-    elements.extend(gender_elems)
+    if(include_gender):
+        elements.extend(gender_elems)
     elements.extend(institute_elems)
     elements.extend(city_elems)
     elements.extend(employer_elems)
     elements.extend(degree_elems)
-    elements.extend(age_elems)
+    if(include_age):
+        elements.extend(age_elems)
 
     doc.build(elements)
 
