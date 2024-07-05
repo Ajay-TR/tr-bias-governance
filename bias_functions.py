@@ -67,6 +67,19 @@ def read_json_files(directory):
                     print(f"Error reading {file_path}: {e}")
     return df
 
+def extract_job_info(folder_path):
+    json_file_path = os.path.join(folder_path, 'job_description.json')  # Replace with your JSON file name
+    with open(json_file_path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    
+    job_info = {
+        'skills': data['JDParsedData']['Skills']['Required'] + data['JDParsedData']['Skills']['Preferred'],
+        'job_title': data['JDParsedData']['JobProfile']['Title'],
+        'job_description': data['JDParsedData']['JobDescription']
+    }
+    
+    return job_info
+
 def extract_text(directory):
     url = 'https://dev.api.talentmarx.in/api/v1/ml/extract-text'
     texts = []

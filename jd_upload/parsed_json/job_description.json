@@ -1,0 +1,92 @@
+{
+  "JDParsedData": {
+    "FileName": "",
+    "JDLanguage": {
+      "Language": "English",
+      "LanguageCode": "en"
+    },
+    "ParsingDate": "05/07/2024 15:33:54.625",
+    "JobProfile": {
+      "Title": "",
+      "Alias": "",
+      "FormattedName": "",
+      "RelatedSkills": "",
+      "Ontology": ""
+    },
+    "Organization": "",
+    "StaffingAgency": "",
+    "AboutOrganization": "",
+    "JobLocation": {
+      "Location": "",
+      "City": "",
+      "State": "",
+      "Country": "",
+      "IsoCountryCode": "",
+      "ZipCode": ""
+    },
+    "JobCode": "",
+    "JobType": "",
+    "JobShift": "",
+    "IsManagementJob": "",
+    "IndustryType": "",
+    "ExcecutiveType": "",
+    "PostedOnDate": "",
+    "ClosingDate": "",
+    "ExperienceRequired": {
+      "MinimumYearsExperience": "",
+      "MaximumYearsExperience": ""
+    },
+    "ContractDuration": "",
+    "HasContract": "",
+    "SalaryOffered": {
+      "MinAmount": "",
+      "MaxAmount": "",
+      "Currency": "",
+      "Units": "",
+      "Text": ""
+    },
+    "BillRate": {
+      "MinAmount": "",
+      "MaxAmount": "",
+      "Currency": "",
+      "Units": "",
+      "Text": ""
+    },
+    "NoticePeriod": "",
+    "NoOfOpenings": "",
+    "Relocation": "",
+    "Languages": "",
+    "PreferredDemographic": {
+      "Nationality": "",
+      "Visa": "",
+      "AgeLimit": "",
+      "Others": ""
+    },
+    "Domains": [],
+    "Qualifications": {
+      "Preferred": [],
+      "Required": []
+    },
+    "Certifications": {
+      "Preferred": [],
+      "Required": []
+    },
+    "Skills": {
+      "Preferred": [],
+      "Required": []
+    },
+    "Responsibilities": "",
+    "ContactEmail": "",
+    "ContactPhone": "",
+    "ContactPersonName": "",
+    "WebSite": "",
+    "InterviewType": "",
+    "InterviewDate": "",
+    "InterviewTime": "",
+    "InterviewLocation": "",
+    "TypeOfSource": "",
+    "JobDescription": "Banking domain knowledge - Especially Payments\n\nGood Analysis skills for new requirements\n\nSupport develop team for functional front\n\nGood in documentation\n",
+    "JDHtmlData": "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /><meta http-equiv=\"Content-Style-Type\" content=\"text/css\" /><meta name=\"generator\" content=\"Aspose.Words for Java 23.7.0\" /><title></title></head><body style=\"font-family:'Times New Roman'; font-size:12pt\"><div><p style=\"margin-top:0pt; margin-bottom:0pt; font-size:10.5pt\"><span style=\"font-family:'Courier New'\">Banking domain knowledge - Especially Payments</span></p><p style=\"margin-top:0pt; margin-bottom:0pt; font-size:10.5pt\"><span style=\"font-family:'Courier New'; -aw-import:ignore\">&#xa0;</span></p><p style=\"margin-top:0pt; margin-bottom:0pt; font-size:10.5pt\"><span style=\"font-family:'Courier New'\">Good Analysis skills for new requirements</span></p><p style=\"margin-top:0pt; margin-bottom:0pt; font-size:10.5pt\"><span style=\"font-family:'Courier New'; -aw-import:ignore\">&#xa0;</span></p><p style=\"margin-top:0pt; margin-bottom:0pt; font-size:10.5pt\"><span style=\"font-family:'Courier New'\">Support develop team for functional front</span></p><p style=\"margin-top:0pt; margin-bottom:0pt; font-size:10.5pt\"><span style=\"font-family:'Courier New'; -aw-import:ignore\">&#xa0;</span></p><p style=\"margin-top:0pt; margin-bottom:0pt; font-size:10.5pt\"><span style=\"font-family:'Courier New'\">Good in documentation</span></p></div></body></html>",
+    "BuildVersion": "3.1.2024.07.05"
+  }
+}

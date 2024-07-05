@@ -15,7 +15,7 @@ VERSION = '3.1'
 
 
 PROJECT_DIR = os.path.dirname(__file__)
-JD_FILES_DIR_PATH = os.path.join(PROJECT_DIR, 'uploads')
+JD_FILES_DIR_PATH = os.path.join(PROJECT_DIR, 'jd_upload')
 
 INPUT_DIR = os.path.join(JD_FILES_DIR_PATH)
 OUTPUT_DIR = os.path.join(JD_FILES_DIR_PATH, 'parsed_json')
@@ -163,7 +163,7 @@ async def parseFileUsingRchilli(session, filedir, filename):
 
 BATCH_SIZE = 5
 #MAX_FILES_PER_FOLDER = 200
-async def main():
+async def parse_jd():
     total_st = time.time()
     unparsedFiles = getUnParsedFiles(INPUT_DIR, OUTPUT_DIR)
     #unparsedFiles = unparsedFiles[0:MAX_FILES_PER_FOLDER]

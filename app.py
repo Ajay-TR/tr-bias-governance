@@ -6,6 +6,7 @@ import augment_functions
 import requests
 import pandas as pd
 import numpy as np
+import parse_jd_fast
 
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
@@ -15,7 +16,8 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, Page
 app = Flask(__name__)
 app.secret_key = 'kv-654c'
 
-similarity_api_url = 'https://dev.api.talentmarx.in/api/v1/ml/generate-candidate-embeddings/'
+candidate_api = 'https://dev.api.talentmarx.in/api/v1/ml/generate-candidate-embeddings/'
+job_api = 'https://dev.api.talentmarx.in/api/v1/ml/generate-job-embeddings/'
 
 @app.route('/')
 def index():
@@ -39,24 +41,27 @@ def upload():
 def augment():
     data = request.json
     job_description = data.get('jd')
+    file = open('./jd_upload/job_description.doc', 'w+')
+    file.write(job_description)
+    file.close()
+    asyncio.run(parse_jd_fast.parse_jd())
+    job_data = bias_functions.extract_job_info('./jd_upload/parsed_json')
+    job_embed = requests.post(job_api, json=job_data)
 
     df               = bias_functions.read_json_files('./uploads/parsed_json/')
-    df['experience'] = augment_functions.process_column(df['experience'])
-    df['age']        = augment_functions.clean_and_convert_column(df['age'])
-    df['gender']     = augment_functions.clean_column(df['gender'])
-    df['employer']   = augment_functions.clean_column(df['employer'])
-    df['degree']     = augment_functions.clean_column(df['degree'])
-    df['institute']  = augment_functions.clean_column(df['institute'])
-    df['city']       = augment_functions.clean_column(df['city'])
-    df['role']       = augment_functions.clean_column(df['role'])
+    #df['gender']     = augment_functions.clean_column(df['gender'])
+    #df['employer']   = augment_functions.clean_column(df['employer'])
+    #df['degree']     = augment_functions.clean_column(df['degree'])
+    #df['institute']  = augment_functions.clean_column(df['institute'])
+    #df['city']       = augment_functions.clean_column(df['city'])
+    #df['role']       = augment_functions.clean_column(df['role'])
     
     print("Adding score columns")
-    augment_functions.find_score(df, 'gender', job_description, similarity_api_url)
-    augment_functions.find_score(df, 'city', job_description, similarity_api_url)
-    augment_functions.find_score(df, 'institute', job_description, similarity_api_url)
-    augment_functions.find_score(df, 'employer', job_description, similarity_api_url)
-    augment_functions.find_score(df, 'degree', job_description, similarity_api_url)
-    augment_functions.find_score(df, 'age', job_description, similarity_api_url)
+    augment_functions.find_score(df, 'gender', job_embed, candidate_api)
+    augment_functions.find_score(df, 'city', job_embed, candidate_api)
+    augment_functions.find_score(df, 'institute', job_embed, candidate_api)
+    augment_functions.find_score(df, 'employer', job_embed, candidate_api)
+    augment_functions.find_score(df, 'degree', job_embed, candidate_api)
     
     doc = SimpleDocTemplate("report.pdf", pagesize=letter)
     elements = []
@@ -92,17 +97,6 @@ def augment():
         degree_max_elements = [t[0] for t in degree_max_elements]
     else:
         degree_max_elements = 0
-    if len(df['age'].unique().tolist()) > 2:
-        age_elems, age_biased, age_max_elements = augment_functions.get_bias_score(df, 'age')
-        include_age = True
-        if age_max_elements != None:
-            age_max_elements = [t[0] for t in age_max_elements]
-        else:
-            age_max_elements = 0
-    else:
-        include_age = False
-        age_biased = 0
-        age_max_elements = 0
 
     if(include_gender):
         elements.extend(gender_elems)
@@ -110,12 +104,10 @@ def augment():
     elements.extend(city_elems)
     elements.extend(employer_elems)
     elements.extend(degree_elems)
-    if(include_age):
-        elements.extend(age_elems)
 
     doc.build(elements)
 
-    return {"messages": "Bias checked", "age_bias":age_biased, "fav_age": age_max_elements, "gender_bias": gender_biased, "fav_gender": gender_max_elements, "institute_bias": institute_biased, "city_bias": city_biased, "degree_bias": degree_biased, "employer_bias": employer_biased, "fav_degrees": degree_max_elements, "fav_cities": city_max_elements, "fav_institutes": institute_max_elements, "fav_employers": employer_max_elements}
+    return {"messages": "Bias checked", "gender_bias": gender_biased, "fav_gender": gender_max_elements, "institute_bias": institute_biased, "city_bias": city_biased, "degree_bias": degree_biased, "employer_bias": employer_biased, "fav_degrees": degree_max_elements, "fav_cities": city_max_elements, "fav_institutes": institute_max_elements, "fav_employers": employer_max_elements}
 
 if __name__ == '__main__':
     app.run(debug=True)
