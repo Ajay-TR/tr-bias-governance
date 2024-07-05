@@ -8,7 +8,7 @@ from datetime import date
 import base64
 
 def read_json_files(directory):
-    df = pd.DataFrame(columns=['gender', 'degree', 'institute', 'year'])
+    df = pd.DataFrame(columns=['gender', 'degree', 'institute', 'year', 'city', 'employer', 'experience', 'keywords'])
     for filename in os.listdir(directory):
         if filename.endswith('.json'):
             file_path = os.path.join(directory, filename)
@@ -24,8 +24,8 @@ def read_json_files(directory):
                     year = data['ResumeParserData']['DateOfBirth'][-4:]
                     city = data['ResumeParserData']['Address'][0]['City']
                     employer = data['ResumeParserData']["CurrentEmployer"]
-                    experience = data['ResumeParserData']["WorkedPeriod"]["TotalExperienceInYear"]
-                    exp_range = data['ResumeParserData']["WorkedPeriod"]["TotalExperienceRange"]
+                    role = data['ResumeParserData']["JobProfile"]
+                    experience = data['ResumeParserData']["WorkedPeriod"]["TotalExperienceInMonths"]
                     keywords = data['ResumeParserData']['SkillKeywords']
                     
                     gender = gender if gender != '' else np.nan
@@ -34,8 +34,8 @@ def read_json_files(directory):
                     year = year if year != '' else np.nan
                     city = city if city != '' else np.nan
                     employer = employer if employer != '' else np.nan
+                    role = role if role != '' else np.nan
                     experience = experience if experience != '' else np.nan
-                    exp_range = exp_range if exp_range != '' else np.nan
                     keywords = keywords.split(',')
                     
                     row = pd.DataFrame([{
@@ -45,8 +45,8 @@ def read_json_files(directory):
                         'year' : year,
                         'city' : city,
                         'employer' : employer,
+                        'role' : role,
                         'experience' : experience,
-                        'experience_range' : exp_range,
                         'keywords' : keywords
                     }])
                     df = pd.concat([df, row], ignore_index=True)
@@ -60,7 +60,7 @@ def read_json_files(directory):
                         except (ValueError, TypeError):
                             df.at[index, 'age'] = np.nan
                         try:
-                            df.at[index, 'experience'] = 1 if(float(years) > 4) else 0
+                            df.at[index, 'experience'] = int(years)
                         except (ValueError, TypeError):
                             df.at[index, 'experience'] = years
                 except json.JSONDecodeError as e:

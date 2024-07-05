@@ -82,11 +82,23 @@ def find_score(df, colname, jd, url):
       continue
     temp_df = df.copy()
     temp_df[colname] = val
-    resume_data = create_info_text(temp_df[['age', 'city', 'gender', 'institute', 'degree',
-       'employer', 'experience']])
     data = {
-      "queryDocumentString": jd,
-      "documentStrings": resume_data
+    "skills": [
+        ",".join(temp_df['keywords'])
+    ],
+    "experienceMonths": temp_df['experience'],
+    "experience": [
+        {
+        "role": df['role'],
+        "company": temp_df['employer']
+        }
+    ],
+    "education": [
+        {
+        "degree": temp_df['degree'],
+        "insititution": temp_df['institute']
+        }
+    ]
     }
     response = requests.post(url, json=data)
     scores = eval(response.text)['similarities']

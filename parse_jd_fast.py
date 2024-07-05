@@ -7,23 +7,15 @@ import json
 import os
 import asyncio
 import sys
-import argparse
-
-parser = argparse.ArgumentParser()
-parser.add_argument('--userkey', dest='userkey', type=str, help='Set Rchilli UserKey')
-parser.add_argument('--sub-userid', dest='sub_userid', type=str, help='Set Rchilli Sub-UserId')
-parser.add_argument('--jd-files-dir', dest='jd_files_dir', type=str, help='Set JD_FILES_DIR_PATH: Path to the files to be parsed!')
-parser.add_argument('-f', '--force', help="Force Create Required Dir", action="store_true")
-args = parser.parse_args()
 
 API_ENDPOINT = "https://jdrest.rchilli.com/JDParser/RChilli/ParseJD" 
-USERKEY = args.userkey
-SUBUSERID = args.sub_userid
+USERKEY = '7YUHY6CPP03RC'
+SUBUSERID = 'Alok Gupta'
 VERSION = '3.1' 
 
 
 PROJECT_DIR = os.path.dirname(__file__)
-JD_FILES_DIR_PATH = args.jd_files_dir
+JD_FILES_DIR_PATH = os.path.join(PROJECT_DIR, 'uploads')
 
 INPUT_DIR = os.path.join(JD_FILES_DIR_PATH)
 OUTPUT_DIR = os.path.join(JD_FILES_DIR_PATH, 'parsed_json')
@@ -34,41 +26,16 @@ SUCCESS_FILES_DIR = os.path.join(JD_FILES_DIR_PATH, 'parsed_files')
 # print(f"Add all output parsed files in {OUTPUT_DIR}")
 
 if not os.path.exists(INPUT_DIR):
-    inp = input(f"Dir {INPUT_DIR} does not exist. Press 'y' to create or 'n' to quit program: ") if not args.force else 'y'
-    if inp == 'y':
-        os.makedirs(INPUT_DIR)
-    else:
-        exit()
-else:
-    print(f"INPUT dir Exists: {INPUT_DIR}")
+    os.makedirs(INPUT_DIR)
 
 if not os.path.exists(OUTPUT_DIR):
-    inp = input(f"Dir {OUTPUT_DIR} does not exist. Press 'y' to create or 'n' to quit program: ") if not args.force else 'y'
-    if inp == 'y':
-        os.makedirs(OUTPUT_DIR)
-    else:
-        exit()
-else:
-    print(f"OUTPUT dir Exists: {OUTPUT_DIR}")
+    os.makedirs(OUTPUT_DIR)
 
 if not os.path.exists(FAILED_FILES_DIR):
-    inp = input(f"Dir {FAILED_FILES_DIR} does not exist. Press 'y' to create or 'n' to quit program: ") if not args.force else 'y'
-    if inp == 'y':
-        os.makedirs(FAILED_FILES_DIR)
-    else:
-        exit()
-else:
-    print(f"FAILED FILES dir Exists: {FAILED_FILES_DIR}")
+    os.makedirs(FAILED_FILES_DIR)
     
 if not os.path.exists(SUCCESS_FILES_DIR):
-    inp = input(f"Dir {SUCCESS_FILES_DIR} does not exist. Press 'y' to create or 'n' to quit program: ") if not args.force else 'y'
-    if inp == 'y':
-        os.makedirs(SUCCESS_FILES_DIR)
-    else:
-        exit()
-else:
-    print(f"SUCCESS FILES dir Exists: {SUCCESS_FILES_DIR}")    
-
+    os.makedirs(SUCCESS_FILES_DIR)
 
 def moveAlreadyParsedFilesToParsedFolder(filenames: list[str]):
     print(f"moving {len(filenames)} to {SUCCESS_FILES_DIR}")
@@ -111,20 +78,6 @@ def getUnParsedFiles(inputDir: str, outputDir: str) -> list[str]:
             alreadyParsedFiles.append(filename)
     moveAlreadyParsedFilesToParsedFolder(alreadyParsedFiles)
     return unparsedFiles
-
-
-async def simulateAPICall(*args, **kwargs):
-    ts = random.randint(1, 3)
-    print(f"Simulating api call for {json.loads(kwargs['data'])['filename']}... will take {ts} seconds")
-    
-    time.sleep(ts)
-    
-    fakeResponse = json.dumps({"result": "Done"})
-    # throw error 40% of time randomly
-    if random.randint(1,10) < 4:
-        raise Exception("Server Error")
-    return fakeResponse
-
 
 async def saveParsedJSONToOutputDir(filename, jsonData):
     savefilepath = os.path.join(OUTPUT_DIR, filename[0:filename.rfind('.')] + '.json')
@@ -208,12 +161,12 @@ async def parseFileUsingRchilli(session, filedir, filename):
         return e
 
 
-BATCH_SIZE = 10
-MAX_FILES_PER_FOLDER = 200
+BATCH_SIZE = 5
+#MAX_FILES_PER_FOLDER = 200
 async def main():
     total_st = time.time()
     unparsedFiles = getUnParsedFiles(INPUT_DIR, OUTPUT_DIR)
-    unparsedFiles = unparsedFiles[0:MAX_FILES_PER_FOLDER]
+    #unparsedFiles = unparsedFiles[0:MAX_FILES_PER_FOLDER]
     print(f"Unparsed Files: {unparsedFiles}")
     tasks = []
     st = time.time()
@@ -241,9 +194,9 @@ async def main():
     total_et = time.time()
     print(f"Total Time Taken: {total_et - total_st} seconds")
 
-if __name__ == '__main__':
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
+#if __name__ == '__main__':
+#    loop = asyncio.get_event_loop()
+#    loop.run_until_complete(main())
     # print(USERKEY, SUBUSERID, JD_FILES_DIR_PATH)
 
 # # if __name__ == "__main__":

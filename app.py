@@ -15,7 +15,7 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, Page
 app = Flask(__name__)
 app.secret_key = 'kv-654c'
 
-similarity_api_url = 'https://dev.api.talentmarx.in/api/v1/ml/similarity/'
+similarity_api_url = 'https://dev.api.talentmarx.in/api/v1/ml/generate-candidate-embeddings/'
 
 @app.route('/')
 def index():
@@ -47,6 +47,8 @@ def augment():
     df['employer']   = augment_functions.clean_column(df['employer'])
     df['degree']     = augment_functions.clean_column(df['degree'])
     df['institute']  = augment_functions.clean_column(df['institute'])
+    df['city']       = augment_functions.clean_column(df['city'])
+    df['role']       = augment_functions.clean_column(df['role'])
     
     print("Adding score columns")
     augment_functions.find_score(df, 'gender', job_description, similarity_api_url)
