@@ -4,6 +4,7 @@ import requests
 import re
 from scipy.stats import f_oneway
 import matplotlib.pyplot as plt
+from sklearn.metrics.pairwise import cosine_similarity
 
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
@@ -17,18 +18,18 @@ def process_column(column):
             value = value.strip()
             match = re.match(r'(\d+(\.\d+)?)\+', value)
             if match:
-                return float(match.group(1))
+                return int(match.group(1))
             match = re.match(r'(\d+(\.\d+)?)\s*years?', value, re.IGNORECASE)
             if match:
-                return float(match.group(1))
+                return int(match.group(1))
             if value.upper() == 'NULL':
                 return np.nan
             try:
-                return float(value)
+                return int(value)
             except ValueError:
                 return np.nan  
         elif isinstance(value, (int, float)):
-            return float(value)
+            return int(value)
         else:
             return np.nan  
     return column.apply(process_value)
@@ -76,27 +77,39 @@ def create_info_text(df):
 def scale_score(x):
     return (x+1) / 2
 
-def find_score(df, colname, jd, url):
+def find_score(df, colname, j_embed, url):
   for val in df[colname].unique().tolist():
     if 'nan' in str(val):
       continue
     temp_df = df.copy()
     temp_df[colname] = val
-    resume_data = create_info_text(temp_df[['age', 'city', 'gender', 'institute', 'degree',
-       'employer', 'experience']])
-    data = {
-      "queryDocumentString": jd,
-      "documentStrings": resume_data
-    }
-    response = requests.post(url, json=data)
-    scores = eval(response.text)['similarities']
-    scores = list(map(scale_score, scores))
-    df["Score_{}_{}".format(colname, val)] = scores
-  return "Added Columns"
+    for index, row in temp_df.iterrows():
+        data = {
+        "skills": [
+            temp_df.at[index, 'keywords']
+        ],
+        "experienceMonths": temp_df.at[index, 'experience'],
+        "experience": [
+            {
+            "role": temp_df.at[index, 'role'],
+            "company": temp_df.at[index, 'employer']
+            }
+        ],
+        "education": [
+            {
+            "degree": temp_df.at[index, 'degree'],
+            "insititution": temp_df.at[index, 'institute']
+            }
+        ]
+        }
+        c_embed = requests.post(url, json=data)
+        score = cosine_similarity(c_embed, j_embed)
+        df.at[index, "Score_{}_{}".format(colname, val)] = score
+        
+    return "Added score columns"
 
 def get_bias_score(df, col):
     graph_path = None
-    all_idx = None
     min_elements = None
     max_elements = None
     col_list = []
@@ -187,6 +200,9 @@ def get_bias_score(df, col):
     elements.append(Spacer(1, 12))
     elements.append(PageBreak())
 
-    is_biased = p_value < 0.05
+    if p_value < 0.05:
+        is_biased = 1
+    else:
+        is_biased = 0
 
     return elements, is_biased, max_elements

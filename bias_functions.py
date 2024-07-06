@@ -6,10 +6,9 @@ import shutil
 import json
 from datetime import date 
 import base64
-from aif360.sklearn import metrics
 
 def read_json_files(directory):
-    df = pd.DataFrame(columns=['gender', 'degree', 'institute', 'year'])
+    df = pd.DataFrame(columns=['gender', 'degree', 'institute', 'year', 'city', 'employer', 'experience', 'keywords'])
     for filename in os.listdir(directory):
         if filename.endswith('.json'):
             file_path = os.path.join(directory, filename)
@@ -25,8 +24,8 @@ def read_json_files(directory):
                     year = data['ResumeParserData']['DateOfBirth'][-4:]
                     city = data['ResumeParserData']['Address'][0]['City']
                     employer = data['ResumeParserData']["CurrentEmployer"]
-                    experience = data['ResumeParserData']["WorkedPeriod"]["TotalExperienceInYear"]
-                    exp_range = data['ResumeParserData']["WorkedPeriod"]["TotalExperienceRange"]
+                    role = data['ResumeParserData']["JobProfile"]
+                    experience = data['ResumeParserData']["WorkedPeriod"]["TotalExperienceInMonths"]
                     keywords = data['ResumeParserData']['SkillKeywords']
                     
                     gender = gender if gender != '' else np.nan
@@ -35,8 +34,8 @@ def read_json_files(directory):
                     year = year if year != '' else np.nan
                     city = city if city != '' else np.nan
                     employer = employer if employer != '' else np.nan
+                    role = role if role != '' else np.nan
                     experience = experience if experience != '' else np.nan
-                    exp_range = exp_range if exp_range != '' else np.nan
                     keywords = keywords.split(',')
                     
                     row = pd.DataFrame([{
@@ -46,8 +45,8 @@ def read_json_files(directory):
                         'year' : year,
                         'city' : city,
                         'employer' : employer,
+                        'role' : role,
                         'experience' : experience,
-                        'experience_range' : exp_range,
                         'keywords' : keywords
                     }])
                     df = pd.concat([df, row], ignore_index=True)
@@ -57,16 +56,29 @@ def read_json_files(directory):
                         born = df.at[index, 'year']
                         years = df.at[index, 'experience']
                         try:
-                            df.at[index, 'age'] =  1 if((current_year - int(born)) > 35) else 0
+                            df.at[index, 'age'] =  current_year - int(born)
                         except (ValueError, TypeError):
-                            df.at[index, 'age'] = born
+                            df.at[index, 'age'] = np.nan
                         try:
-                            df.at[index, 'experience'] = 1 if(float(years) > 4) else 0
+                            df.at[index, 'experience'] = int(years)
                         except (ValueError, TypeError):
                             df.at[index, 'experience'] = years
                 except json.JSONDecodeError as e:
                     print(f"Error reading {file_path}: {e}")
     return df
+
+def extract_job_info(folder_path):
+    json_file_path = os.path.join(folder_path, 'job_description.json')  # Replace with your JSON file name
+    with open(json_file_path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    
+    job_info = {
+        'skills': data['JDParsedData']['Skills']['Required'] + data['JDParsedData']['Skills']['Preferred'],
+        'job_title': data['JDParsedData']['JobProfile']['Title'],
+        'job_description': data['JDParsedData']['JobDescription']
+    }
+    
+    return job_info
 
 def extract_text(directory):
     url = 'https://dev.api.talentmarx.in/api/v1/ml/extract-text'
@@ -84,18 +96,7 @@ def extract_text(directory):
             response = requests.post(url, json=payload)
             response_data = response.text
             texts.append(response_data)
-    return texts
-
-def check_bias_binary(df, colname, group):
-    temp_df = df[[colname, 'selected']]
-    temp_df = temp_df.dropna()
-    parity_diff = metrics.statistical_parity_difference(temp_df['selected'], prot_attr=temp_df[colname], priv_group=group)
-    disparate_impact = metrics.disparate_impact_ratio(temp_df['selected'], prot_attr=temp_df[colname], priv_group=group)
-    if ((parity_diff > 0.05 or parity_diff < -0.05) or (disparate_impact > 1.2 or parity_diff < 0.8)):
-        return 1
-    else:
-        return 0
-    
+    return texts 
 
 def check_bias_multi(df, colname, threshold):
     temp_df = df[[colname, 'selected']]
