@@ -46,7 +46,7 @@ def augment():
     file.close()
     asyncio.run(parse_jd_fast.parse_jd())
     job_data = bias_functions.extract_job_info('./jd_upload/parsed_json')
-    job_embed = requests.post(job_api, json=job_data)
+    job_embed = requests.post(job_api, json=job_data).text
 
     df               = bias_functions.read_json_files('./uploads/parsed_json/')
     #df['gender']     = augment_functions.clean_column(df['gender'])

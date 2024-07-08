@@ -74,8 +74,8 @@ def extract_job_info(folder_path):
     
     job_info = {
         'skills': data['JDParsedData']['Skills']['Required'] + data['JDParsedData']['Skills']['Preferred'],
-        'job_title': data['JDParsedData']['JobProfile']['Title'],
-        'job_description': data['JDParsedData']['JobDescription']
+        'jobTitle': data['JDParsedData']['JobProfile']['Title'],
+        'jobDescription': data['JDParsedData']['JobDescription']
     }
     
     return job_info

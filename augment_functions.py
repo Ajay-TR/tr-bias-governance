@@ -79,33 +79,42 @@ def scale_score(x):
     return (x+1) / 2
 
 def find_score(df, colname, j_embed, url):
+  def clean_api_payload(temp_df, index):
+    data = {
+      "skills": temp_df.at[index, 'keywords'] if temp_df.at[index, 'keywords'] is not None else "",
+      "experienceMonths": temp_df.at[index, 'experience'] if temp_df.at[index, 'experience'] is not None else 12,
+      "experience": [
+        {
+          "role": temp_df.at[index, 'role'] if temp_df.at[index, 'role'] is not None else "",
+          "company": temp_df.at[index, 'employer'] if temp_df.at[index, 'employer'] is not None else ""
+        }
+      ],
+      "education": [
+        {
+          "degree": temp_df.at[index, 'degree'] if temp_df.at[index, 'degree'] is not None else "",
+          "insititution": temp_df.at[index, 'institute'] if temp_df.at[index, 'institute'] is not None else ""
+        }
+      ]
+    }
+    
+    return data
   for val in df[colname].unique().tolist():
     if 'nan' in str(val):
       continue
     temp_df = df.replace({np.nan: None})
     temp_df[colname] = val
     for index, row in temp_df.iterrows():
-        data = {
-        "skills": 
-            temp_df.at[index, 'keywords']
-        ,
-        "experienceMonths": temp_df.at[index, 'experience'],
-        "experience": [
-            {
-            "role": temp_df.at[index, 'role'],
-            "company": temp_df.at[index, 'employer']
-            }
-        ],
-        "education": [
-            {
-            "degree": temp_df.at[index, 'degree'],
-            "insititution": temp_df.at[index, 'institute']
-            }
-        ]
-        }
+        
+        data = clean_api_payload(temp_df, index)
+        
         c_embed = requests.post(url, json=data).text
-        score = (cosine_similarity(c_embed, j_embed) + 1) /2
-        df.at[index, "Score_{}_{}".format(colname, val)] = score
+
+        j_embed_norm = np.array([eval(j_embed)['NormalizedEmbedding']])
+        c_embed_norm = np.array([eval(c_embed)['NormalizedEmbedding']])
+
+        score = (cosine_similarity(c_embed_norm, j_embed_norm) + 1) /2
+
+        df.at[index, "Score_{}_{}".format(colname, val)] = score[0][0]
         
     return "Added score columns"
 
