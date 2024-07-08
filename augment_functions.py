@@ -5,6 +5,7 @@ import re
 from scipy.stats import f_oneway
 import matplotlib.pyplot as plt
 from sklearn.metrics.pairwise import cosine_similarity
+import json
 
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
@@ -81,13 +82,13 @@ def find_score(df, colname, j_embed, url):
   for val in df[colname].unique().tolist():
     if 'nan' in str(val):
       continue
-    temp_df = df.copy()
+    temp_df = df.replace({np.nan: None})
     temp_df[colname] = val
     for index, row in temp_df.iterrows():
         data = {
-        "skills": [
+        "skills": 
             temp_df.at[index, 'keywords']
-        ],
+        ,
         "experienceMonths": temp_df.at[index, 'experience'],
         "experience": [
             {
@@ -102,8 +103,8 @@ def find_score(df, colname, j_embed, url):
             }
         ]
         }
-        c_embed = requests.post(url, json=data)
-        score = cosine_similarity(c_embed, j_embed)
+        c_embed = requests.post(url, json=data).text
+        score = (cosine_similarity(c_embed, j_embed) + 1) /2
         df.at[index, "Score_{}_{}".format(colname, val)] = score
         
     return "Added score columns"
