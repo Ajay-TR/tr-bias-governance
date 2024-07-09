@@ -49,12 +49,12 @@ def augment():
     job_embed = requests.post(job_api, json=job_data).text
 
     df               = bias_functions.read_json_files('./uploads/parsed_json/')
-    #df['gender']     = augment_functions.clean_column(df['gender'])
-    #df['employer']   = augment_functions.clean_column(df['employer'])
-    #df['degree']     = augment_functions.clean_column(df['degree'])
-    #df['institute']  = augment_functions.clean_column(df['institute'])
-    #df['city']       = augment_functions.clean_column(df['city'])
-    #df['role']       = augment_functions.clean_column(df['role'])
+    df['gender']     = augment_functions.clean_column(df['gender'])
+    df['employer']   = augment_functions.clean_column(df['employer'])
+    df['degree']     = augment_functions.clean_column(df['degree'])
+    df['institute']  = augment_functions.clean_column(df['institute'])
+    df['city']       = augment_functions.clean_column(df['city'])
+    df['role']       = augment_functions.clean_column(df['role'])
     
     print("Adding score columns")
     augment_functions.find_score(df, 'gender', job_embed, candidate_api)
@@ -62,7 +62,7 @@ def augment():
     augment_functions.find_score(df, 'institute', job_embed, candidate_api)
     augment_functions.find_score(df, 'employer', job_embed, candidate_api)
     augment_functions.find_score(df, 'degree', job_embed, candidate_api)
-    
+
     doc = SimpleDocTemplate("report.pdf", pagesize=letter)
     elements = []
     
