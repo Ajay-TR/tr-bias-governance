@@ -79,46 +79,41 @@ def scale_score(x):
     return (x+1) / 2
 
 def find_score(df, colname, j_embed, url):
-  def clean_api_payload(temp_df, index):
-    data = {
-      "skills": temp_df.at[index, 'keywords'] if temp_df.at[index, 'keywords'] is not None else "",
-      "experienceMonths": temp_df.at[index, 'experience'] if temp_df.at[index, 'experience'] is not None else 12,
-      "experience": [
-        {
-          "role": temp_df.at[index, 'role'] if temp_df.at[index, 'role'] is not None else "",
-          "company": temp_df.at[index, 'employer'] if temp_df.at[index, 'employer'] is not None else ""
-        }
-      ],
-      "education": [
-        {
-          "degree": temp_df.at[index, 'degree'] if temp_df.at[index, 'degree'] is not None else "",
-          "insititution": temp_df.at[index, 'institute'] if temp_df.at[index, 'institute'] is not None else ""
-        }
-      ]
-    }
-    
-    return data
-  for val in df[colname].unique().tolist():
-    if 'nan' in str(val):
-      continue
-    temp_df = df.replace({np.nan: None})
-    temp_df[colname] = val
-    for index, row in temp_df.iterrows():
-        
-        data = clean_api_payload(temp_df, index)
-        
-        c_embed = requests.post(url, json=data).text
-
-        j_embed_norm = np.array([eval(j_embed)['NormalizedEmbedding']])
-        c_embed_norm = np.array([eval(c_embed)['NormalizedEmbedding']])
-
-        score = (cosine_similarity(c_embed_norm, j_embed_norm) + 1) /2
-
-        df.at[index, "Score_{}_{}".format(colname, val)] = score[0][0]
-        
+    for val in df[colname].unique().tolist():
+        if 'nan' in str(val):
+            continue
+        temp_df = df.copy()
+        temp_df[colname] = val
+        for index, row in temp_df.iterrows():
+            data = {
+            "skills": 
+                list(temp_df.at[index, 'skill']) if 'nan' not in str(temp_df.at[index, 'skill']) else []
+            ,
+            "experienceMonths": str(temp_df.at[index, 'experiencemonths']) if 'nan' not in str(temp_df.at[index, 'experiencemonths']) else 0,
+            "experience": [
+                {
+                "role": temp_df.at[index, 'curr_title'] if temp_df.at[index, 'curr_title'] != "nan" else "",
+                "company": temp_df.at[index, 'company'] if temp_df.at[index, 'company'] != "nan" else "",
+                }
+            ],
+            "education": [
+                {
+                "degree": temp_df.at[index, 'degree'] if temp_df.at[index, 'degree'] != "nan" else "",
+                "insititution": temp_df.at[index, 'college'] if temp_df.at[index, 'college'] != "nan" else ""
+                }
+            ]
+            }
+            data_json = json.dumps(data)
+            c_embed = requests.post(url, data=data_json).text
+            j_embed_norm = np.array([eval(j_embed)["NormalizedEmbedding"]])
+            c_embed_norm = np.array([eval(c_embed)["NormalizedEmbedding"]])
+            
+            score = (cosine_similarity(c_embed_norm, j_embed_norm) + 1) /2
+            df.at[index, "Score_{}_{}".format(colname, val)] = score[0][0]
     return "Added score columns"
 
-def get_bias_score(df, col):
+def get_bias_score(df, col, job_num, unique_list):
+    print("Column name is  :", col)
     graph_path = None
     min_elements = None
     max_elements = None
@@ -129,14 +124,18 @@ def get_bias_score(df, col):
     heading_style = styles['Heading1']
     body_style = styles['BodyText']
     elements = []
+    
+    job_title = Paragraph("For JOB ID : {}".format(job_num), title_style)
+    elements.append(job_title)
 
     title =  Paragraph("Bias Analysis for {}".format(col), title_style)
     elements.append(title)
     elements.append(Spacer(1, 12))
 
-    for val in df[col].unique().tolist():
-        if 'nan' not in str(val):
-            col_list.append('Score_'+col+'_'+str(val))
+    for val in unique_list:
+        print("The current value is : ", val)
+        col_list.append('Score_'+col+'_'+str(val))
+    print("Values in test list are : ", col_list)
     means = []
     for colname in col_list:
         mean = df[colname].mean()
@@ -178,6 +177,8 @@ def get_bias_score(df, col):
         elements.append(Spacer(1, 12))
 
     data = [df[colname] for colname in col_list]
+    print("The column list for P-Value test is : ", col_list)
+    print(data)
     p_value = f_oneway(*data)[1]
 
     p_val = Paragraph(f"P-Value: {p_value}", body_style)

@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href= "{{ url_for('static',filename='styles/styles.css') }}">
-    <title>Folder Upload</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/styles.css') }}">
+    <title>File Upload</title>
   </head>
   <body>
     <h1>AI Bias Governance</h1>
@@ -13,7 +13,7 @@
       <div class="main-column">
         <div class="main-form">
           <form id="uploadForm" method="POST" enctype="multipart/form-data">
-            <input type="file" name="files" id="folderInput" webkitdirectory directory multiple />
+            <input type="file" name="file" id="fileInput" />
             <button type="submit">Upload</button>
           </form>
         </div>
@@ -32,126 +32,94 @@
         </div>
       </div>
     </div>
-  </body>
 
-  <script>
-    document
-      .getElementById("uploadForm")
-      .addEventListener("submit", async (e) => {
+    <script>
+      document.getElementById("uploadForm").addEventListener("submit", async (e) => {
         e.preventDefault();
 
         const formData = new FormData();
-        const files = document.getElementById("folderInput").files;
-        if (files.length === 0) {
-          alert("ERROR: No files selected for uploading");
+        const file = document.getElementById("fileInput").files[0];
+        if (!file) {
+          alert("ERROR: No file selected for uploading");
           return;
         }
-        for (let i = 0; i < files.length; i++) {
-          formData.append("files", files[i]);
-        }
+        formData.append("file", file);
+
         try {
           const response = await fetch("/upload", {
             method: "POST",
             body: formData,
           });
-          console.log("Upload successful");
 
-          document.getElementById("resultTextArea").style.display = "block";
+          if (response.ok) {
+            console.log("Upload successful");
+            document.getElementById("resultTextArea").style.display = "block";
+          } else {
+            console.error("Error uploading file:", response.statusText);
+            alert("Something went wrong!");
+          }
         } catch (error) {
-          console.error("Error uploading files:", error);
+          console.error("Error uploading file:", error);
           alert("Something went wrong!");
         }
       });
-    
+
       document.getElementById("jd").addEventListener("submit", async (e) => {
         e.preventDefault();
         const jd = document.getElementById("outputTextArea").value;
         const result_div = document.getElementById("result");
-        result_div.innerHTML = '<div class="loader" style="display: none;"></div>';
-        const loader = document.getElementsByClassName("loader")[0];
-        loader.style.display = "block";
+        result_div.innerHTML = '<div class="loader" style="display: block;"></div>';
+        
         try {
-            const response = await fetch("/check_bias", {
-                method: "POST",
-                body: JSON.stringify({ jd: jd }),
-                headers: {
-                    "Content-Type": "application/json"
-                }
+          const response = await fetch("/check_bias", {
+            method: "POST",
+            body: JSON.stringify({ jd: jd }),
+            headers: {
+              "Content-Type": "application/json"
+            }
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            console.log(data.messages);
+
+            const biases = [
+              { type: 'age', detected: data.age_bias, fav: data.fav_age },
+              { type: 'gender', detected: data.gender_bias, fav: data.fav_gender },
+              { type: 'city', detected: data.city_bias, fav: data.fav_cities },
+              { type: 'institute', detected: data.institute_bias, fav: data.fav_institutes },
+              { type: 'employer', detected: data.employer_bias, fav: data.fav_employers },
+              { type: 'degree', detected: data.degree_bias, fav: data.fav_degrees },
+            ];
+
+            let result_text = "<h2>Bias Detection Results</h2>";
+            let noBiasDetected = true;
+            result_text += "<ul>";
+
+            biases.forEach(bias => {
+              if (bias.detected && bias.fav && bias.fav.length > 0) {
+                noBiasDetected = false;
+                result_text += `<li>${bias.type.charAt(0).toUpperCase() + bias.type.slice(1)} Bias Detected in favour of <span class='result-class'>${bias.fav.join(", ")}</span></li>`;
+              }
             });
 
-            if (response.ok) {
-              const data = await response.json(); // Wait for the JSON response
-              console.log(data.messages);
-              const age_bias = data.age_bias;
-              const gender_bias = data.gender_bias;
-              const city_bias = data.city_bias;
-              const institute_bias = data.institute_bias;
-              const employer_bias = data.employer_bias;
-              const degree_bias = data.degree_bias;
-              fav_age = data.fav_age;
-              fav_gender = data.fav_gender
-              fav_cities = data.fav_cities;
-              fav_institutes = data.fav_institutes;
-              fav_employers = data.fav_employers;
-              fav_degrees = data.fav_degrees;
-              
-              if (fav_cities !== 0) {
-                fav_cities = fav_cities.join(", ");
-              }
-              if (fav_institutes !== 0) {
-                fav_institutes = fav_institutes.join(", ");
-              }
-              if (fav_employers !== 0) {
-                fav_employers = fav_employers.join(", ");
-              }
-              if (fav_degrees !== 0) {
-                fav_degrees = fav_degrees.join(", ");
-              }
-              if (fav_age !== 0) {
-                fav_age = fav_agea.join(", ");
-              }
-              if (fav_gender !== 0) {
-                fav_gender = fav_gender.join(", ");
-              }
+            result_text += "</ul>";
 
-              result_text = "";
-              result_text = "<h2>Bias Detection Results</h2>";
-              if (!age_bias && !gender_bias && !city_bias && !institute_bias) {
-                result_text += "No Bias Detected\n";
-              } else {
-                result_text += "<ul>";
-                if (age_bias && fav_age !== 0) {
-                  result_text += "<li>City Bias Detected in favour of <span class='result-class'>"+fav_age+"</span></li>";
-                }
-                if (gender_bias && fav_gender !== 0) {
-                  result_text += "<li>City Bias Detected in favour of <span class='result-class'>"+fav_gender+"</span></li>";
-                }
-                if (city_bias && fav_cities !== 0) {
-                  result_text += "<li>City Bias Detected in favour of <span class='result-class'>"+fav_cities+"</span></li>";
-                }
-                if (institute_bias && fav_institutes !== 0) {
-                  result_text += "<li>Institute Bias Detected in favour of <span class='result-class'>"+fav_institutes+"</span></li>";
-                }
-                if (employer_bias && fav_employers !== 0) {
-                  result_text += "<li>Employer Bias Detected in favour of <span class='result-class'>"+fav_employers+"</span></li>";
-                }
-                if (degree_bias && fav_degrees !== 0) {
-                  result_text += "<li>Degree Bias Detected in favour of <span class='result-class'>"+fav_degrees+"</span></li>";
-                }
-                result_text += "</ul>";
-              }
-              loader.style.display = "none";
-              result_div.innerHTML = result_text;
-            } else {
-                loader.style.display = "none";
-                console.error("HTTP error:", response.status);
+            if (noBiasDetected) {
+              result_text = "<h2>Bias Detection Results</h2><p>No Bias Detected</p>";
             }
-            
-        } catch (error) {
-            console.error("Error checking bias:", error);
-            alert("Something went wrong!");
-        }
-    });
 
-  </script>
+            result_div.innerHTML = result_text;
+          } else {
+            console.error("HTTP error:", response.status);
+          }
+        } catch (error) {
+          console.error("Error checking bias:", error);
+          alert("Something went wrong!");
+        } finally {
+          document.querySelector(".loader").style.display = "none";
+        }
+      });
+    </script>
+  </body>
 </html>
