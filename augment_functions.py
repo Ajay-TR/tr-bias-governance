@@ -89,7 +89,7 @@ def find_score(df, colname, j_embed, url):
             "skills": 
                 list(temp_df.at[index, 'skill']) if 'nan' not in str(temp_df.at[index, 'skill']) else []
             ,
-            "experienceMonths": str(temp_df.at[index, 'experiencemonths']) if 'nan' not in str(temp_df.at[index, 'experiencemonths']) else 0,
+            "experienceMonths": int(temp_df.at[index, 'experiencemonths']) if 'nan' not in str(temp_df.at[index, 'experiencemonths']) else 0,
             "experience": [
                 {
                 "role": temp_df.at[index, 'curr_title'] if temp_df.at[index, 'curr_title'] != "nan" else "",
@@ -138,6 +138,8 @@ def get_bias_score(df, col, job_num, unique_list):
     print("Values in test list are : ", col_list)
     means = []
     for colname in col_list:
+        if colname not in df.columns.tolist():
+            continue
         mean = df[colname].mean()
         means.append(mean)
     en_means = list(enumerate(means))
@@ -176,7 +178,12 @@ def get_bias_score(df, col, job_num, unique_list):
             elements.append(Spacer(1, 12))
         elements.append(Spacer(1, 12))
 
-    data = [df[colname] for colname in col_list]
+    data = []
+    for colname in col_list:
+        if colname not in df.columns.tolist():
+            continue
+        data.append(df[colname])
+    #data = [df[colname] for colname in col_list]
     print("The column list for P-Value test is : ", col_list)
     print(data)
     p_value = f_oneway(*data)[1]
