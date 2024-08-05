@@ -70,6 +70,7 @@ def upload():
         }
         job_embed = requests.post(job_api, json=job_data).text
         print()
+        job_df = df.copy()
         job_df = job_df.drop(columns=['jobid', 'candidateid','description', 'title', 'candidateexperience', 'candidateeducation'])
         
         # print("Adding score columns")

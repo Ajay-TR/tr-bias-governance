@@ -89,7 +89,7 @@ def find_score(df, colname, j_embed, url):
             "skills": 
                 list(temp_df.at[index, 'skill']) if 'nan' not in str(temp_df.at[index, 'skill']) else []
             ,
-            "experienceMonths": int(temp_df.at[index, 'experiencemonths']) if 'nan' not in str(temp_df.at[index, 'experiencemonths']) else 0,
+            "experienceMonths": int(temp_df.at[index, 'experiencemonths']) if '[]' not in str(temp_df.at[index, 'experiencemonths']) else 0,
             "experience": [
                 {
                 "role": temp_df.at[index, 'curr_title'] if temp_df.at[index, 'curr_title'] != "nan" else "",
@@ -109,7 +109,7 @@ def find_score(df, colname, j_embed, url):
             c_embed_norm = np.array([eval(c_embed)["NormalizedEmbedding"]])
             
             score = (cosine_similarity(c_embed_norm, j_embed_norm) + 1) /2
-            df.at[index, "Score_{}_{}".format(colname, val)] = score[0][0]
+            df.at[index, "Score_{}_{}".format(colname, str(val))] = score[0][0]
     return "Added score columns"
 
 def get_bias_score(df, col, job_num, unique_list):
@@ -138,10 +138,12 @@ def get_bias_score(df, col, job_num, unique_list):
     print("Values in test list are : ", col_list)
     means = []
     for colname in col_list:
-        if colname not in df.columns.tolist():
-            continue
-        mean = df[colname].mean()
-        means.append(mean)
+        if colname in df.columns.tolist():
+            mean = df[colname].mean()
+            means.append(mean)
+        else:
+            col_list.remove(colname)
+        
     en_means = list(enumerate(means))
     en_means.sort(key=lambda x: x[1], reverse=True)
     min_idx = []
@@ -194,7 +196,7 @@ def get_bias_score(df, col, job_num, unique_list):
 
     if p_value < 0.05:
         plt.figure(figsize=(10, 12))
-        plt.plot(col_list, means,)
+        plt.plot(col_list, means)
         plt.xticks(rotation=90, fontsize = 6)
         graph_path = col + "_score"
         plt.savefig(graph_path, format='png')
